@@ -29,7 +29,7 @@ resource "aws_ecs_task_definition" "app" {
       options = {
         awslogs-create-group  = "true",
         awslogs-group         = var.app_name,
-        awslogs-region        = var.region,
+        awslogs-region        = data.aws_region.current.name,
         awslogs-stream-prefix = "ecs"
       }
     }

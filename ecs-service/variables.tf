@@ -10,10 +10,6 @@ variable "image_tag" {
   type = string
 }
 
-variable "region" {
-  type = string
-}
-
 variable "ecs_cluster_id" {
   type = string
 }
