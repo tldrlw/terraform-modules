@@ -19,7 +19,7 @@ variable "ecs_cluster_id" {
 }
 
 variable "task_count" {
-  type = string
+  type = number
 }
 
 variable "alb_target_group_arn" {
@@ -37,9 +37,9 @@ variable "security_groups" {
 }
 
 variable "container_port" {
-  type = string
+  type = number
 }
 
 variable "host_port" {
-  type = string
+  type = number
 }
