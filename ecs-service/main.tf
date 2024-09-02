@@ -33,7 +33,7 @@ resource "aws_ecs_task_definition" "app" {
         awslogs-stream-prefix = "ecs"
       }
     }
-    # ^ guidance for this: https://cloud.theodo.com/en/blog/essential-container-error-ecs
+    # ^ guidance for this: https://cloud.theodo.com/en/blog/essential-container-error-ecs and https://docs.aws.amazon.com/AmazonECS/latest/developerguide/specify-log-config.html
   }])
 }
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_task_definition
