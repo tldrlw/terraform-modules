@@ -1,3 +1,10 @@
+# Variables
+variable "enable_cors" {
+  description = "Set to true to enable CORS for this method."
+  type        = bool
+  default     = false
+}
+
 resource "aws_api_gateway_method" "self" {
   rest_api_id   = var.REST_api_id
   resource_id   = var.REST_api_resource_id
@@ -7,11 +14,11 @@ resource "aws_api_gateway_method" "self" {
 }
 
 resource "aws_api_gateway_method_response" "two_hundred" {
+  count       = var.enable_cors ? 1 : 0
   rest_api_id = var.REST_api_id
   resource_id = var.REST_api_resource_id
   http_method = aws_api_gateway_method.self.http_method
   status_code = "200"
-  //cors section
   response_parameters = {
     "method.response.header.Access-Control-Allow-Headers" = true,
     "method.response.header.Access-Control-Allow-Methods" = true,
@@ -27,9 +34,8 @@ resource "aws_api_gateway_integration" "self" {
   type                    = "AWS_PROXY"
   uri                     = aws_lambda_function.self.invoke_arn
 }
-# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/api_gateway_integration#argument-reference
 
-resource "aws_lambda_permission" "podcasts_post" {
+resource "aws_lambda_permission" "self" {
   statement_id  = "AllowExecutionFromAPIGatewayMyAPI"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.self.function_name
@@ -38,11 +44,11 @@ resource "aws_lambda_permission" "podcasts_post" {
 }
 
 resource "aws_api_gateway_integration_response" "self" {
+  count       = var.enable_cors ? 1 : 0
   rest_api_id = var.REST_api_id
   resource_id = var.REST_api_resource_id
   http_method = aws_api_gateway_method.self.http_method
-  status_code = aws_api_gateway_method_response.two_hundred.status_code
-  //cors
+  status_code = aws_api_gateway_method_response.two_hundred[0].status_code
   response_parameters = {
     "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
     "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST,PUT'",
@@ -52,4 +58,51 @@ resource "aws_api_gateway_integration_response" "self" {
     aws_api_gateway_method.self,
     aws_api_gateway_integration.self
   ]
+}
+
+# Add the OPTIONS method conditionally for CORS
+resource "aws_api_gateway_method" "options" {
+  count         = var.enable_cors ? 1 : 0
+  rest_api_id   = var.REST_api_id
+  resource_id   = var.REST_api_resource_id
+  http_method   = "OPTIONS"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_method_response" "options" {
+  count       = var.enable_cors ? 1 : 0
+  rest_api_id = var.REST_api_id
+  resource_id = var.REST_api_resource_id
+  http_method = aws_api_gateway_method.options[0].http_method
+  status_code = "200"
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = true,
+    "method.response.header.Access-Control-Allow-Methods" = true,
+    "method.response.header.Access-Control-Allow-Origin"  = true
+  }
+}
+
+resource "aws_api_gateway_integration" "options" {
+  count                = var.enable_cors ? 1 : 0
+  rest_api_id          = var.REST_api_id
+  resource_id          = var.REST_api_resource_id
+  http_method          = aws_api_gateway_method.options[0].http_method
+  type                 = "MOCK"
+  passthrough_behavior = "WHEN_NO_MATCH"
+  request_templates = {
+    "application/json" = "{\"statusCode\": 200}"
+  }
+}
+
+resource "aws_api_gateway_integration_response" "options" {
+  count       = var.enable_cors ? 1 : 0
+  rest_api_id = var.REST_api_id
+  resource_id = var.REST_api_resource_id
+  http_method = aws_api_gateway_method.options[0].http_method
+  status_code = aws_api_gateway_method_response.options[0].status_code
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST,PUT'",
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+  }
 }
