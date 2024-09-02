@@ -81,9 +81,3 @@ variable "REST_api_resource_id" {
 variable "REST_api_authorizer_id" {
   type = string
 }
-
-variable "enable_cors" {
-  type        = bool
-  description = "Set this to true for, e.g., you have client components (as opposed to server-side components) in your next.js app making API calls to the lambda function"
-  default     = false
-}
