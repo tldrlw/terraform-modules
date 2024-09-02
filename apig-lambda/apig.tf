@@ -1,10 +1,3 @@
-# Variables
-variable "enable_cors" {
-  description = "Set to true to enable CORS for this method."
-  type        = bool
-  default     = false
-}
-
 resource "aws_api_gateway_method" "self" {
   rest_api_id   = var.REST_api_id
   resource_id   = var.REST_api_resource_id
