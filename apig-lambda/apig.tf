@@ -71,7 +71,7 @@ resource "aws_api_gateway_method_response" "options_200" {
   count        = var.enable_cors ? 1 : 0
   rest_api_id  = var.REST_api_id
   resource_id  = var.REST_api_resource_id
-  http_method  = aws_api_gateway_method.options.http_method
+  http_method  = aws_api_gateway_method.options[count.index].http_method
   status_code  = "200"
   
   response_parameters = {
@@ -85,7 +85,7 @@ resource "aws_api_gateway_integration_response" "options_200" {
   count        = var.enable_cors ? 1 : 0
   rest_api_id  = var.REST_api_id
   resource_id  = var.REST_api_resource_id
-  http_method  = aws_api_gateway_method.options.http_method
+  http_method  = aws_api_gateway_method.options[count.index].http_method
   status_code  = "200"
   
   response_parameters = {
@@ -99,7 +99,7 @@ resource "aws_api_gateway_integration" "options" {
   count         = var.enable_cors ? 1 : 0
   rest_api_id   = var.REST_api_id
   resource_id   = var.REST_api_resource_id
-  http_method   = aws_api_gateway_method.options.http_method
+  http_method   = aws_api_gateway_method.options[count.index].http_method
   type          = "MOCK"
   
   request_templates = {
