@@ -39,3 +39,8 @@ variable "container_port" {
 variable "host_port" {
   type = number
 }
+
+variable "linux_arm64" {
+  type    = bool
+  default = false
+}

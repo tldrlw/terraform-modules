@@ -6,11 +6,15 @@ resource "aws_ecs_task_definition" "app" {
   cpu                      = "256"
   memory                   = "512"
   # ^ allowed cpu and memory combinations: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html#task_size
-  runtime_platform {
-    operating_system_family = "LINUX"
-    cpu_architecture        = "ARM64"
+  # Conditionally add the runtime_platform block based on the variable
+  dynamic "runtime_platform" {
+    for_each = var.linux_arm64 ? [1] : []
+    content {
+      operating_system_family = "LINUX"
+      cpu_architecture        = "ARM64"
+    }
   }
-  # ^ since we're building and pushing the Docker container on an M1 Mac: https://cloud.theodo.com/en/blog/essential-container-error-ecs
+  # ^ since we could be building and pushing the Docker container on an M-series Mac: https://cloud.theodo.com/en/blog/essential-container-error-ecs
   # ^ won't need for nginx:latest since it's being pulled from Docker
   container_definitions = jsonencode([{
     name = var.app_name
@@ -28,12 +32,12 @@ resource "aws_ecs_task_definition" "app" {
       logDriver = "awslogs",
       options = {
         awslogs-create-group  = "true",
-        awslogs-group         = var.app_name,
+        awslogs-group         = "/aws/ecs/${var.app_name}",
         awslogs-region        = data.aws_region.current.name,
         awslogs-stream-prefix = "ecs"
       }
     }
-    # ^ guidance for this: https://cloud.theodo.com/en/blog/essential-container-error-ecs
+    # ^ guidance for this: https://cloud.theodo.com/en/blog/essential-container-error-ecs and https://docs.aws.amazon.com/AmazonECS/latest/developerguide/specify-log-config.html
   }])
 }
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_task_definition

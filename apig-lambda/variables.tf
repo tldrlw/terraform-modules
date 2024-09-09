@@ -81,3 +81,13 @@ variable "REST_api_resource_id" {
 variable "REST_api_authorizer_id" {
   type = string
 }
+
+variable "enable_cors" {
+  type    = bool
+  default = false
+}
+
+variable "create_options" {
+  type    = bool
+  default = false
+}
