@@ -71,10 +71,6 @@ resource "aws_lb_target_group" "self" {
   }
 }
 
-output "alb_dns_name" {
-  value = aws_lb.self.dns_name
-}
-
 # Client: Sends a request.
 # ALB: Receives the request.
 # Listener: Listens on specified ports and routes traffic based on rules.
