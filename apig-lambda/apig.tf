@@ -1,13 +1,3 @@
-variable "enable_cors" {
-  type    = bool
-  default = false
-}
-
-variable "create_options" {
-  type    = bool
-  default = false
-}
-
 resource "aws_api_gateway_method" "self" {
   rest_api_id   = var.REST_api_id
   resource_id   = var.REST_api_resource_id
@@ -71,11 +61,11 @@ resource "aws_api_gateway_method" "options" {
 }
 
 resource "aws_api_gateway_method_response" "options_200" {
-  count        = var.enable_cors && var.create_options ? 1 : 0
-  rest_api_id  = var.REST_api_id
-  resource_id  = var.REST_api_resource_id
-  http_method  = aws_api_gateway_method.options[count.index].http_method
-  status_code  = "200"
+  count       = var.enable_cors && var.create_options ? 1 : 0
+  rest_api_id = var.REST_api_id
+  resource_id = var.REST_api_resource_id
+  http_method = aws_api_gateway_method.options[count.index].http_method
+  status_code = "200"
   response_parameters = {
     "method.response.header.Access-Control-Allow-Headers" = true,
     "method.response.header.Access-Control-Allow-Methods" = true,
@@ -84,11 +74,11 @@ resource "aws_api_gateway_method_response" "options_200" {
 }
 
 resource "aws_api_gateway_integration_response" "options_200" {
-  count        = var.enable_cors && var.create_options ? 1 : 0
-  rest_api_id  = var.REST_api_id
-  resource_id  = var.REST_api_resource_id
-  http_method  = aws_api_gateway_method.options[count.index].http_method
-  status_code  = "200"
+  count       = var.enable_cors && var.create_options ? 1 : 0
+  rest_api_id = var.REST_api_id
+  resource_id = var.REST_api_resource_id
+  http_method = aws_api_gateway_method.options[count.index].http_method
+  status_code = "200"
   response_parameters = {
     "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
     "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST,PUT'",
@@ -97,11 +87,11 @@ resource "aws_api_gateway_integration_response" "options_200" {
 }
 
 resource "aws_api_gateway_integration" "options" {
-  count         = var.enable_cors && var.create_options ? 1 : 0
-  rest_api_id   = var.REST_api_id
-  resource_id   = var.REST_api_resource_id
-  http_method   = aws_api_gateway_method.options[count.index].http_method
-  type          = "MOCK"
+  count       = var.enable_cors && var.create_options ? 1 : 0
+  rest_api_id = var.REST_api_id
+  resource_id = var.REST_api_resource_id
+  http_method = aws_api_gateway_method.options[count.index].http_method
+  type        = "MOCK"
   request_templates = {
     "application/json" = "{\"statusCode\": 200}"
   }
