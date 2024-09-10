@@ -1,7 +1,7 @@
 # ECS
 resource "aws_security_group" "self" {
   vpc_id                 = var.vpc_id
-  name                   = var.app_name
+  name                   = "${var.app_name}-ecs"
   description            = "Security group for ${var.app_name} ecs app"
   revoke_rules_on_delete = true
 }
