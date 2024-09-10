@@ -2,7 +2,6 @@
 resource "aws_security_group" "self" {
   vpc_id                 = var.vpc_id
   name                   = "${var.alb_name}-alb"
-  description            = "Security group for alb"
   revoke_rules_on_delete = true
 }
 
