@@ -1,0 +1,35 @@
+# General
+.DS_Store
+*.log
+
+# Ignore Terraform state files in any module directory
+**/*.tfstate
+**/*.tfstate.*
+
+# Ignore Terraform provider and module downloads in any module directory
+**/.terraform/
+**/.terraform.lock.hcl
+
+# Ignore backup files created by Terraform
+**/*.tfvars
+**/*.tfvars.json
+
+# Ignore override files in any module directory (local overrides, sensitive data, or local configurations)
+**/override.tf
+**/override.tf.json
+**/*_override.tf
+**/*_override.tf.json
+
+# Ignore plan output files (often used to save the result of `terraform plan`)
+**/*.tfplan
+
+# Ignore crash log files (in case of Terraform crash)
+**/crash.log
+
+# Ignore module and provider archives
+**/*.zip
+**/*.tar.gz
+
+# Ignore any sensitive or configuration files that shouldn't be committed
+**/*.secret
+**/*.env
