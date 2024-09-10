@@ -22,13 +22,17 @@ variable "alb_target_group_arn" {
   type = string
 }
 
-variable "subnets" {
-  description = "List of subnet IDs to associate with the ECS service."
-  type        = list(string)
+variable "vpc_id" {
+  type = string
 }
 
-variable "security_groups" {
-  description = "List of security group IDs to associate with the ECS service."
+variable "source_security_group_id" {
+  type        = string
+  description = "this will be the security group id of the ALB"
+}
+
+variable "subnets" {
+  description = "List of subnet IDs to associate with the ECS service."
   type        = list(string)
 }
 
@@ -43,4 +47,9 @@ variable "host_port" {
 variable "linux_arm64" {
   type    = bool
   default = false
+}
+
+variable "security_group_egress_cidrs" {
+  type        = list(string)
+  description = "set to ['0.0.0.0/0'] if you want it to be open to the world, or else, e.g., '[your.office.ip/32', 'your.other.ip/32'], etc."
 }
