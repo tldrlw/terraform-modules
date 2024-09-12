@@ -16,6 +16,7 @@ resource "aws_ecs_task_definition" "app" {
   }
   # ^ since we could be building and pushing the Docker container on an M-series Mac: https://cloud.theodo.com/en/blog/essential-container-error-ecs
   # ^ won't need for nginx:latest since it's being pulled from Docker
+  # docs on runtime platform: https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_RuntimePlatform.html
   container_definitions = jsonencode([{
     name = var.app_name
     # image     = "nginx:latest"
