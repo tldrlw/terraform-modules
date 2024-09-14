@@ -42,8 +42,8 @@ resource "aws_ecs_task_definition" "app" {
     dynamic "environment" {
       for_each = var.environment_variables
       content {
-        name  = environment.value.name
-        value = environment.value.value
+        name  = environment.value["name"]
+        value = environment.value["value"]
       }
     }
   }])
