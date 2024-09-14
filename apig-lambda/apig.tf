@@ -42,7 +42,7 @@ resource "aws_api_gateway_integration_response" "self" {
   status_code = aws_api_gateway_method_response.two_hundred.status_code
   response_parameters = {
     "method.response.header.Access-Control-Allow-Headers" = var.enable_cors ? "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'" : null,
-    "method.response.header.Access-Control-Allow-Methods" = var.enable_cors ? "'GET,OPTIONS,POST,PUT'" : null,
+    "method.response.header.Access-Control-Allow-Methods" = var.enable_cors ? "'GET,OPTIONS,POST,PUT,DELETE'" : null,
     "method.response.header.Access-Control-Allow-Origin"  = var.enable_cors ? "'*'" : null
   }
   depends_on = [
@@ -81,7 +81,7 @@ resource "aws_api_gateway_integration_response" "options_200" {
   status_code = "200"
   response_parameters = {
     "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
-    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST,PUT'",
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST,PUT,DELETE'",
     "method.response.header.Access-Control-Allow-Origin"  = "'*'"
   }
 }
