@@ -39,6 +39,13 @@ resource "aws_ecs_task_definition" "app" {
       }
     }
     # ^ guidance for this: https://cloud.theodo.com/en/blog/essential-container-error-ecs and https://docs.aws.amazon.com/AmazonECS/latest/developerguide/specify-log-config.html
+    dynamic "environment" {
+      for_each = var.environment_variables
+      content {
+        name  = environment.value.name
+        value = environment.value.value
+      }
+    }
   }])
 }
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_task_definition
