@@ -47,9 +47,13 @@ resource "aws_iam_role_policy_attachment" "lambda_to_s3" {
 data "aws_iam_policy_document" "lambda_to_dydb" {
   count = var.is_dydb == true ? 1 : 0
   statement {
-    effect    = "Allow"
-    actions   = var.dydb_table_permissions
-    resources = [var.dydb_table_arn]
+    effect  = "Allow"
+    actions = var.dydb_table_permissions
+    # Use concat to conditionally include the GSI ARN
+    resources = concat(
+      [var.dydb_table_arn],                                                                                                     # Always include table ARN
+      var.global_secondary_index_name != "" ? [format("%s/index/%s", var.dydb_table_arn, var.global_secondary_index_name)] : [] # Conditionally include GSI ARN
+    )
   }
 }
 

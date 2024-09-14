@@ -91,3 +91,8 @@ variable "create_options" {
   type    = bool
   default = false
 }
+
+variable "global_secondary_index_name" {
+  type    = string
+  default = ""
+}

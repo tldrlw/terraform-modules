@@ -3,9 +3,9 @@ resource "aws_ecs_task_definition" "app" {
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   execution_role_arn       = aws_iam_role.ecs_task_execution.arn
-  cpu                      = "256"
-  memory                   = "512"
-  # ^ allowed cpu and memory combinations: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html#task_size
+  cpu                      = var.cpu
+  memory                   = var.memory
+  # 
   # Conditionally add the runtime_platform block based on the variable
   dynamic "runtime_platform" {
     for_each = var.linux_arm64 ? [1] : []
@@ -16,6 +16,7 @@ resource "aws_ecs_task_definition" "app" {
   }
   # ^ since we could be building and pushing the Docker container on an M-series Mac: https://cloud.theodo.com/en/blog/essential-container-error-ecs
   # ^ won't need for nginx:latest since it's being pulled from Docker
+  # docs on runtime platform: https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_RuntimePlatform.html
   container_definitions = jsonencode([{
     name = var.app_name
     # image     = "nginx:latest"

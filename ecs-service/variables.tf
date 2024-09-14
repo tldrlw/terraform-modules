@@ -53,3 +53,15 @@ variable "security_group_egress_cidrs" {
   type        = list(string)
   description = "set to ['0.0.0.0/0'] if you want it to be open to the world, or else, e.g., '[your.office.ip/32', 'your.other.ip/32'], etc."
 }
+
+variable "cpu" {
+  type    = string
+  default = "256"
+}
+
+variable "memory" {
+  type    = string
+  default = "512"
+}
+# ^ allowed cpu and memory combinations: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html#task_size
+# ^ defaults are the lowest allowed values
