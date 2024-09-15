@@ -47,6 +47,5 @@ resource "aws_lambda_permission" "allow_public_invoke_function_url" {
   function_name          = aws_lambda_function.self.function_name
   principal              = "*"
   function_url_auth_type = "NONE"
-  source_arn             = aws_lambda_function_url.self[count.index].function_url
 }
 # ^ To allow unauthenticated (public) access to your Lambda function URL when the authorization_type is set to "NONE", you need to add a resource-based policy to your Lambda function that grants the lambda:InvokeFunctionUrl permission to all principals (*). This is required to allow public access since there is no authentication method when authorization_type is set to "NONE".
