@@ -68,18 +68,22 @@ variable "function_url" {
 # apig
 variable "REST_api_id" {
   type = string
+  default = null
 }
 
 variable "REST_api_execution_arn" {
   type = string
+  default = null
 }
 
 variable "REST_api_resource_id" {
   type = string
+  default = null
 }
 
 variable "REST_api_authorizer_id" {
   type = string
+  default = null
 }
 
 variable "enable_cors" {
