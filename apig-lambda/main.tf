@@ -27,7 +27,7 @@ resource "aws_lambda_function" "self" {
 resource "aws_lambda_function_url" "self" {
   count              = var.function_url ? 1 : 0
   function_name      = aws_lambda_function.self.function_name
-  authorization_type = "AWS_IAM"
+  authorization_type = var.function_url_public ? "NONE" : "AWS_IAM"
   cors {
     allow_credentials = true
     allow_origins     = ["*"]
