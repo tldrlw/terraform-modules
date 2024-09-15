@@ -39,3 +39,14 @@ resource "aws_lambda_function_url" "self" {
 }
 # CORS settings: https://docs.aws.amazon.com/lambda/latest/dg/urls-configuration.html#urls-cors
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function_url
+
+resource "aws_lambda_permission" "allow_public_invoke_function_url" {
+  count                  = var.function_url && var.function_url_public ? 1 : 0
+  statement_id           = "AllowPublicInvokeFunctionUrl"
+  action                 = "lambda:InvokeFunctionUrl"
+  function_name          = aws_lambda_function.self.function_name
+  principal              = "*"
+  function_url_auth_type = "NONE"
+  source_arn             = aws_lambda_function_url.self[count.index].function_url
+}
+# ^ To allow unauthenticated (public) access to your Lambda function URL when the authorization_type is set to "NONE", you need to add a resource-based policy to your Lambda function that grants the lambda:InvokeFunctionUrl permission to all principals (*). This is required to allow public access since there is no authentication method when authorization_type is set to "NONE".
