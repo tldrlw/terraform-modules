@@ -9,9 +9,9 @@ output "arn" {
 }
 
 output "apig_method_id" {
-  value = aws_api_gateway_method.self.id
+  value = length(aws_api_gateway_method.self) > 0 ? aws_api_gateway_method.self[0].id : null
 }
 
 output "apig_integration_id" {
-  value = aws_api_gateway_integration.self.id
+  value = length(aws_api_gateway_integration.self) > 0 ? aws_api_gateway_integration.self[0].id : null
 }
