@@ -41,7 +41,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "alb_logs" {
 }
 
 # Data block to define the policy using aws_iam_policy_document
-data "aws_iam_policy_document" "alb_logs_policy" {
+data "aws_iam_policy_document" "alb_logs" {
   count = var.enable_logs_to_s3 ? 1 : 0
   # Allow Elastic Load Balancer to write logs to S3
   statement {
