@@ -33,7 +33,10 @@ variable "enable_logs_to_s3" {
 }
 
 variable "elb_account_id" {
-  type        = string
+  type    = string
+  default = "127311923021"
+  # setting the default to use1 so terraform doesn't ask for it if `enable_logs_to_s3_new_regions` is set to true
+  # if `enable_logs_to_s3_new_regions` is set to false, then this value must be set to whatever the region is, unless it's use1
   description = "goes in bucket policy for alb_logs - https://docs.aws.amazon.com/elasticloadbalancing/latest/application/enable-access-logging.html - check under 'Regions available before August 2022' for value"
 }
 
