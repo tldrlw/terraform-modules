@@ -10,6 +10,8 @@
 
 - Good guide on setting up Security Groups for ECS: https://medium.com/the-cloud-journal/ecs-fargate-with-alb-deployment-using-terraform-part-3-eb52309fdd8f
 
+- 9/18/2024, added configuration for ALB logging to S3, to use set `enable_logs_to_s3 = true`
+
 ## ecs-service
 
 - To see this being implemented, check out https://github.com/tldrlw/blog-tldrlw/blob/main/infrastructure/ecs.tf

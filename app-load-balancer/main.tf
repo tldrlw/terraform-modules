@@ -5,6 +5,15 @@ resource "aws_lb" "self" {
   security_groups            = [aws_security_group.self.id]
   subnets                    = var.subnet_ids
   enable_deletion_protection = false
+  # Enable access logging
+  dynamic "access_logs" {
+    for_each = var.enable_logs_to_s3 && length(aws_s3_bucket.alb_logs) > 0 ? [1] : []
+    content {
+      bucket  = aws_s3_bucket.alb_logs[0].bucket # Reference the first S3 bucket
+      enabled = true
+      # prefix  = "alb-logs" # Optional: Specify a prefix for the log files
+    }
+  }
 }
 
 resource "aws_lb_listener" "http_redirect_to_https" {
