@@ -7,9 +7,9 @@ resource "aws_lb" "self" {
   enable_deletion_protection = false
   # Enable access logging
   dynamic "access_logs" {
-    for_each = var.enable_logs_to_s3 ? [1] : []
+    for_each = var.enable_logs_to_s3 && length(aws_s3_bucket.alb_logs) > 0 ? [1] : []
     content {
-      bucket  = aws_s3_bucket.alb_logs[count.index].bucket # Reference the S3 bucket for logs
+      bucket  = aws_s3_bucket.alb_logs[0].bucket # Reference the first S3 bucket
       enabled = true
       # prefix  = "alb-logs" # Optional: Specify a prefix for the log files
     }
