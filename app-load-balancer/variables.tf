@@ -31,3 +31,14 @@ variable "enable_logs_to_s3" {
   type    = bool
   default = false # Set this to true when you want to enable S3 logging
 }
+
+variable "elb_account_id" {
+  type        = string
+  description = "goes in bucket policy for alb_logs - https://docs.aws.amazon.com/elasticloadbalancing/latest/application/enable-access-logging.html - check under 'Regions available before August 2022' for value"
+}
+
+variable "enable_logs_to_s3_new_regions" {
+  type        = bool
+  default     = false
+  description = "bucket policy for alb_logs will differ for regions available after august 2022 - https://docs.aws.amazon.com/elasticloadbalancing/latest/application/enable-access-logging.html#attach-bucket-policy - check and see if your region falls under this list, if so, set this to true"
+}

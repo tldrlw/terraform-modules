@@ -40,6 +40,12 @@ resource "aws_s3_bucket_lifecycle_configuration" "alb_logs" {
   }
 }
 
+# Define a dynamic principal based on the value of enable_logs_to_s3_new_regions
+locals {
+  principal_type       = var.enable_logs_to_s3_new_regions ? "Service" : "AWS"
+  principal_identifier = var.enable_logs_to_s3_new_regions ? "logdelivery.elasticloadbalancing.amazonaws.com" : "arn:aws:iam::${var.elb_account_id}:root"
+}
+
 # Data block to define the policy using aws_iam_policy_document
 data "aws_iam_policy_document" "alb_logs" {
   count = var.enable_logs_to_s3 ? 1 : 0
@@ -47,8 +53,8 @@ data "aws_iam_policy_document" "alb_logs" {
   statement {
     sid = "AWSLogDeliveryWrite"
     principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::127311923021:root"]
+      type        = local.principal_type         # Use dynamic principal type
+      identifiers = [local.principal_identifier] # Use dynamic principal identifier
     }
     actions = [
       "s3:PutObject"
@@ -63,8 +69,8 @@ data "aws_iam_policy_document" "alb_logs" {
   statement {
     sid = "AWSLogDeliveryAclCheck"
     principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::127311923021:root"]
+      type        = local.principal_type         # Use dynamic principal type
+      identifiers = [local.principal_identifier] # Use dynamic principal identifier
     }
     actions = [
       "s3:GetBucketAcl"
