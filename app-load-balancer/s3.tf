@@ -63,7 +63,7 @@ data "aws_iam_policy_document" "alb_logs" {
       "${aws_s3_bucket.alb_logs[count.index].arn}/*" # Access to bucket objects
     ]
   }
-  # ^ look at step 2 for the policy
+  # ^ look at step 2 for the policies, they vary based on region
   # https://docs.aws.amazon.com/elasticloadbalancing/latest/application/enable-access-logging.html
   # Allow Elastic Load Balancer to check the bucket ACL
   statement {
