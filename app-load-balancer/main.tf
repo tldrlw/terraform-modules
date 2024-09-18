@@ -9,7 +9,7 @@ resource "aws_lb" "self" {
   dynamic "access_logs" {
     for_each = var.enable_logs_to_s3 ? [1] : []
     content {
-      bucket  = aws_s3_bucket.alb_logs.bucket # Reference the S3 bucket for logs
+      bucket  = aws_s3_bucket.alb_logs[count.index].bucket # Reference the S3 bucket for logs
       enabled = true
       # prefix  = "alb-logs" # Optional: Specify a prefix for the log files
     }
