@@ -72,5 +72,5 @@ data "aws_iam_policy_document" "alb_logs" {
 resource "aws_s3_bucket_policy" "alb_logs" {
   count  = var.enable_logs_to_s3 ? 1 : 0
   bucket = aws_s3_bucket.alb_logs[count.index].id
-  policy = data.aws_iam_policy_document.alb_logs.json
+  policy = data.aws_iam_policy_document.alb_logs[count.index].json
 }
