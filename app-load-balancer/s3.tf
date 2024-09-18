@@ -50,7 +50,7 @@ data "aws_iam_policy_document" "alb_logs" {
       "s3:PutObject"
     ]
     resources = [
-      "${aws_s3_bucket.alb_logs.arn}/*"
+      "${aws_s3_bucket.alb_logs[count.index].arn}/*"
     ]
   }
   statement {
@@ -63,7 +63,7 @@ data "aws_iam_policy_document" "alb_logs" {
       "s3:GetBucketAcl"
     ]
     resources = [
-      aws_s3_bucket.alb_logs.arn
+      aws_s3_bucket.alb_logs[count.index].arn
     ]
   }
 }
@@ -72,5 +72,5 @@ data "aws_iam_policy_document" "alb_logs" {
 resource "aws_s3_bucket_policy" "alb_logs" {
   count  = var.enable_logs_to_s3 ? 1 : 0
   bucket = aws_s3_bucket.alb_logs[count.index].id
-  policy = data.aws_iam_policy_document.alb_logs_policy.json
+  policy = data.aws_iam_policy_document.alb_logs.json
 }
