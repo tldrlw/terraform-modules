@@ -6,7 +6,7 @@ resource "aws_s3_bucket" "alb_logs" {
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "alb_logs" {
   count  = var.enable_logs_to_s3 ? 1 : 0
-  bucket = aws_s3_bucket.alb_logs.id
+  bucket = aws_s3_bucket.alb_logs[count.index].id
   rule {
     apply_server_side_encryption_by_default {
       sse_algorithm = "aws:kms"
@@ -16,7 +16,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "alb_logs" {
 
 resource "aws_s3_bucket_versioning" "alb_logs" {
   count  = var.enable_logs_to_s3 ? 1 : 0
-  bucket = aws_s3_bucket.alb_logs.id
+  bucket = aws_s3_bucket.alb_logs[count.index].id
   versioning_configuration {
     status = "Enabled"
   }
@@ -24,7 +24,7 @@ resource "aws_s3_bucket_versioning" "alb_logs" {
 
 resource "aws_s3_bucket_lifecycle_configuration" "alb_logs" {
   count  = var.enable_logs_to_s3 ? 1 : 0
-  bucket = aws_s3_bucket.alb_logs.id
+  bucket = aws_s3_bucket.alb_logs[count.index].id
   rule {
     id = "log-expiration"
     expiration {
@@ -71,6 +71,6 @@ data "aws_iam_policy_document" "alb_logs" {
 # S3 Bucket Policy using the data source policy document
 resource "aws_s3_bucket_policy" "alb_logs" {
   count  = var.enable_logs_to_s3 ? 1 : 0
-  bucket = aws_s3_bucket.alb_logs.id
+  bucket = aws_s3_bucket.alb_logs[count.index].id
   policy = data.aws_iam_policy_document.alb_logs_policy.json
 }
