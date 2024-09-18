@@ -48,7 +48,7 @@ data "aws_iam_policy_document" "alb_logs" {
     sid = "AWSLogDeliveryWrite"
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+      identifiers = ["arn:aws:iam::127311923021:root"]
     }
     actions = [
       "s3:PutObject"
@@ -64,7 +64,7 @@ data "aws_iam_policy_document" "alb_logs" {
     sid = "AWSLogDeliveryAclCheck"
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+      identifiers = ["arn:aws:iam::127311923021:root"]
     }
     actions = [
       "s3:GetBucketAcl"
