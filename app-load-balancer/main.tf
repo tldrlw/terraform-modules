@@ -28,7 +28,8 @@ resource "aws_lb_listener" "http_redirect_to_https" {
       status_code = "HTTP_301"
     }
   }
-  # default_action defines what the listener should do with the traffic that doesn’t match any specific rules. The common action is to forward traffic to a target group (see listener https), but you can also perform other actions like redirecting or returning a fixed response
+  # Handles only the redirection from HTTP to HTTPS (no need to forward traffic to a target group).
+  # default_action defines what the listener should do with the traffic that doesn’t match any specific rules. The common action is to forward traffic to a target group (see listener https ***not doing this anymore***), but you can also perform other actions like redirecting or returning a fixed response
 }
 
 resource "aws_lb_listener" "https" {
@@ -37,12 +38,20 @@ resource "aws_lb_listener" "https" {
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-2016-08"
   certificate_arn   = var.certificate_arn
+  # Instead of using a specific target group in the default action, you can rely solely on listener rules to forward traffic to the correct target group based on the conditions (e.g., host headers or paths).
+  # Change the default_action in the aws_lb_listener for HTTPS (port 443) to a simple rule with no specific target group. All the traffic routing will be handled by the individual listener rules.
   default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.self.arn
+    # type             = "forward"
+    # target_group_arn = aws_lb_target_group.self.arn
+    type = "fixed-response" # If no rule matches, you can return a fixed response
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "No matching rule found"
+      status_code  = "404"
+    }
   }
-  # in this example, the default_action will be taken when we hit yourhostname.com, since the listener rule below has the host_header condition set to the root domain
 }
+# Will handle the routing of traffic to the correct target group via listener rules based on the host header (domain) or other conditions.
 
 resource "aws_lb_listener_rule" "https" {
   count        = length(var.target_group_and_listener_config) # Create listener rules based on the number of target groups
@@ -63,6 +72,7 @@ resource "aws_lb_listener_rule" "https" {
     }
   }
 }
+# These rules define the host headers (subdomains) and forward traffic to the appropriate target group based on the target_group_and_listener_config variable.
 
 resource "aws_lb_target_group" "self" {
   count       = length(var.target_group_and_listener_config) # Create target groups based on the length of the list
