@@ -45,11 +45,12 @@ resource "aws_lb_listener" "https" {
 }
 
 resource "aws_lb_listener_rule" "https" {
+  count        = length(var.target_group_and_listener_config) # Create listener rules based on the number of target groups
   listener_arn = aws_lb_listener.https.arn
-  priority     = 100
+  priority     = 100 + count.index # Ensure a unique priority by adding the index to a base value
   action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.self.arn
+    target_group_arn = aws_lb_target_group.self[count.index].arn # Forward traffic to the respective target group
   }
   condition {
     path_pattern {
@@ -58,21 +59,20 @@ resource "aws_lb_listener_rule" "https" {
   }
   condition {
     host_header {
-      values = [var.hostname]
+      values = [var.target_group_and_listener_config[count.index].domain] # Use domain from the variable
     }
   }
 }
 
 resource "aws_lb_target_group" "self" {
-  name = "${var.target_group_name}-tg"
-  # port        = 80
-  # ^ use for nginx:latest
+  count       = length(var.target_group_and_listener_config) # Create target groups based on the length of the list
+  name        = "${var.target_group_and_listener_config[count.index].name}-tg"
   port        = 3000
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
-  target_type = "ip" # Change target type to 'ip'
+  target_type = "ip"
   health_check {
-    path                = var.target_group_health_check
+    path                = var.target_group_and_listener_config[count.index].health_check_path # Use health check path from the variable
     interval            = 30
     timeout             = 5
     healthy_threshold   = 2

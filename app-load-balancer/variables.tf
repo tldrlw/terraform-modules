@@ -10,12 +10,20 @@ variable "alb_name" {
   type = string
 }
 
-variable "hostname" {
-  type = string
-}
+# variable "hostname" {
+#   type = string
+# }
 
-variable "target_group_name" {
-  type = string
+# variable "target_group_name" {
+#   type = string
+# }
+
+variable "target_group_and_listener_config" {
+  type = list(object({
+    name              = string
+    domain            = string
+    health_check_path = string
+  }))
 }
 
 variable "certificate_arn" {
@@ -46,7 +54,7 @@ variable "enable_logs_to_s3_new_regions" {
   description = "bucket policy for alb_logs will differ for regions available after august 2022 - https://docs.aws.amazon.com/elasticloadbalancing/latest/application/enable-access-logging.html#attach-bucket-policy - check and see if your region falls under this list, if so, set this to true"
 }
 
-variable "target_group_health_check" {
-  type = string
-  default = "/"
-}
+# variable "target_group_health_check" {
+#   type    = string
+#   default = "/"
+# }
