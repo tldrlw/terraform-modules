@@ -12,6 +12,8 @@
 
 - 9/18/2024, added configuration for ALB logging to S3, to use set `enable_logs_to_s3 = true`
 
+- 9/29/2024, added support for single ALB to have multiple listener rules and target groups to support multiple apps of different subdomains, e.g., using a single ALB to route traffic to either blog.tldrlw.com or monza.tldrlw.com - benefit to this approach as opposed to 1 ALB : 1 app is cost savings, especially if multiple apps are running in the same region
+
 ## ecs-service
 
 - To see this being implemented, check out https://github.com/tldrlw/blog-tldrlw/blob/main/infrastructure/ecs.tf
