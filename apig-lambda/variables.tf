@@ -30,6 +30,12 @@ variable "REST_method" {
   type = string
 }
 
+variable "use_wildcard_method_in_function_url" {
+  type    = bool
+  default = false
+}
+# ^ used in https://github.com/tldrlw/monza-tldrlw/blob/main/infrastructure/lambda.tf
+
 variable "is_s3" {
   type = bool
   # default = null
