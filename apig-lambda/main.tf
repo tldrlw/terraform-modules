@@ -33,6 +33,7 @@ resource "aws_lambda_function_url" "self" {
     allow_origins     = ["*"]
     allow_methods     = ["*"]
     # allow_headers     = ["Content-Type", "Authorization", "X-Amz-Date", "X-Amz-Security-Token", "date", "keep-alive"]
+    # ^ for explanation of whether or not all those headers are required, check Apple notes (Lambda)
     allow_headers     = ["date", "keep-alive"]
     expose_headers    = ["keep-alive", "date"]
     max_age           = 86400
