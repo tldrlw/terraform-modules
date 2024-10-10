@@ -34,7 +34,7 @@ resource "aws_lambda_function_url" "self" {
     allow_methods     = var.use_wildcard_method_in_function_url ? ["*"] : [var.REST_method] # Dynamically set based on use_wildcard_method
     # allow_headers     = ["Content-Type", "Authorization", "X-Amz-Date", "X-Amz-Security-Token", "date", "keep-alive"]
     # ^ for explanation on whether or not all those headers are required, check Apple notes (AWS Lambda)
-    allow_headers  = ["date", "keep-alive"]
+    allow_headers  = ["Access-Control-Allow-Origin", "date", "keep-alive"]
     expose_headers = ["keep-alive", "date"]
     max_age        = 86400
   }
