@@ -5,6 +5,18 @@ resource "aws_security_group" "self" {
   revoke_rules_on_delete = true
 }
 
+resource "aws_security_group_rule" "http_ingress" {
+  type              = "ingress"
+  from_port         = 80
+  to_port           = 80
+  protocol          = "TCP"
+  description       = "Allow HTTP inbound traffic for redirection"
+  security_group_id = aws_security_group.self.id
+  cidr_blocks       = var.security_group_cidrs
+}
+# Your security group configuration is missing an inbound rule for HTTP (port 80), which is required for the HTTP listener to be reachable and handle redirection to HTTPS.
+# This rule will allow HTTP traffic to reach the load balancer, enabling the listener to process HTTP-to-HTTPS redirections properly. - added 10/29/24
+
 resource "aws_security_group_rule" "https_ingress" {
   type              = "ingress"
   from_port         = 443
