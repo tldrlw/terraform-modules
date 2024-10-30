@@ -58,6 +58,7 @@ resource "aws_ecs_service" "app" {
   desired_count   = var.task_count
   # ^ change to 1 or 2 when you want the task running, as opposed to 0
   launch_type = "FARGATE"
+  enable_execute_command = true  # Enables ECS Exec
   network_configuration {
     subnets          = var.subnets
     security_groups  = [aws_security_group.self.id]
