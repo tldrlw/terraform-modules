@@ -45,7 +45,7 @@ data "aws_iam_policy_document" "s3_access_policy_doc" {
   statement {
     actions   = ["s3:GetObject"]
     effect    = "Allow"
-    resources = ["arn:aws:s3:::tldrlw-ecs-config-files/*"]  # Access all files in the bucket
+    resources = ["arn:aws:s3:::tldrlw-ecs-config-files/*"] # Access all files in the bucket
   }
 }
 
@@ -58,11 +58,12 @@ resource "aws_iam_policy" "s3_access_policy" {
 
 # Conditionally Attach S3 Access Policy
 resource "aws_iam_role_policy_attachment" "attach_s3_access_policy" {
-  count      = var.command != null ? 1 : 0  # Attach only if `command` is not null
+  count      = var.command != null ? 1 : 0 # Attach only if `command` is not null
   role       = aws_iam_role.ecs_task_execution.name
   policy_arn = aws_iam_policy.s3_access_policy.arn
 }
 
+# ECS exec
 data "aws_iam_policy_document" "ecs_exec_policy" {
   statement {
     effect = "Allow"
@@ -85,6 +86,8 @@ resource "aws_iam_role_policy_attachment" "ecs_task_exec_attachment" {
   role       = aws_iam_role.ecs_task_execution.name
   policy_arn = aws_iam_policy.ecs_exec_policy.arn
 }
+
+data "aws_iam_policy_document" "ecs_exec_initiator_policy" {
   statement {
     effect = "Allow"
     actions = [
@@ -101,10 +104,10 @@ resource "aws_iam_role_policy_attachment" "ecs_task_exec_attachment" {
 
 resource "aws_iam_policy" "ecs_exec_initiator_policy" {
   name   = "ECSExecInitiatorPolicy"
-  policy = data.aws_iam_policy_document.ecs_exec_initiator_policy_doc.json
+  policy = data.aws_iam_policy_document.ecs_exec_initiator_policy.json
 }
 
-resource "aws_iam_role_policy_attachment" "ecs_exec_initiator_attachment" {
-  role       = aws_iam_role.initiating_user_role.name  # Update this with the IAM user or role initiating the command
+resource "aws_iam_user_policy_attachment" "ecs_exec_initiator_attachment" {
+  user       = data.aws_iam_user.initiating_user.user_name # Reference the IAM user from the data source
   policy_arn = aws_iam_policy.ecs_exec_initiator_policy.arn
 }
