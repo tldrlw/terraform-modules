@@ -72,7 +72,7 @@ resource "aws_iam_policy" "s3_access_policy" {
 
 # Conditionally Attach S3 Access Policy to Task Role
 resource "aws_iam_role_policy_attachment" "attach_s3_access_policy" {
-  count      = var.command != null ? 1 : 0 # Attach only if `command` is not null
+  count      = var.s3_ecs_config_files_access != false ? 1 : 0 # Attach only if `var.s3_ecs_config_files_access` is not false
   role       = aws_iam_role.ecs_task_role.name
   policy_arn = aws_iam_policy.s3_access_policy.arn
 }

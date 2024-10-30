@@ -74,10 +74,9 @@ variable "environment_variables" {
   default = []
 }
 
-variable "command" {
-  description = "Override the default command for the container, used for a startup script"
-  type        = list(string)
-  default     = null
+variable "s3_ecs_config_files_access" {
+  type    = bool
+  default = false
 }
 
 variable "iam_user_for_container_shell" {
