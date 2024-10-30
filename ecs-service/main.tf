@@ -19,7 +19,9 @@ resource "aws_ecs_task_definition" "app" {
   # ^ won't need for nginx:latest since it's being pulled from Docker
   # docs on runtime platform: https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_RuntimePlatform.html
   container_definitions = jsonencode([{
-    name = var.app_name
+    # Conditionally include command if var.command is not null
+    command = var.command != null ? var.command : null
+    name    = var.app_name
     # image     = "nginx:latest"
     image     = "${var.ecr_repo_url}:${var.image_tag}"
     essential = true
@@ -46,8 +48,6 @@ resource "aws_ecs_task_definition" "app" {
         value = env_var.value
       }
     ]
-    # Conditionally include command if var.command is not null
-    command = var.command != null ? var.command : null
   }])
 }
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_task_definition
