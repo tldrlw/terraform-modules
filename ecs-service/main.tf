@@ -45,13 +45,8 @@ resource "aws_ecs_task_definition" "app" {
         value = env_var.value
       }
     ]
-    # Only include command if it's set (not null)
-    dynamic "command" {
-      for_each = var.command != null ? [var.command] : []
-      content {
-        command = command.value
-      }
-    }
+    # Conditionally include command if var.command is not null
+    command = var.command != null ? var.command : null
   }])
 }
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_task_definition
