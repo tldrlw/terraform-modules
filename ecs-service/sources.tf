@@ -2,5 +2,5 @@
 data "aws_region" "current" {}
 
 data "aws_iam_user" "initiating_user" {
-  user_name = "local"
+  user_name = var.iam_user_for_container_shell
 }
