@@ -62,3 +62,49 @@ resource "aws_iam_role_policy_attachment" "attach_s3_access_policy" {
   role       = aws_iam_role.ecs_task_execution.name
   policy_arn = aws_iam_policy.s3_access_policy.arn
 }
+
+data "aws_iam_policy_document" "ecs_exec_policy" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "ssmmessages:CreateControlChannel",
+      "ssmmessages:CreateDataChannel",
+      "ssmmessages:OpenControlChannel",
+      "ssmmessages:OpenDataChannel"
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "ecs_exec_policy" {
+  name   = "ECSExecPolicy"
+  policy = data.aws_iam_policy_document.ecs_exec_policy.json
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_task_exec_attachment" {
+  role       = aws_iam_role.ecs_task_execution.name
+  policy_arn = aws_iam_policy.ecs_exec_policy.arn
+}
+  statement {
+    effect = "Allow"
+    actions = [
+      "ecs:ExecuteCommand",
+      "ssm:StartSession",
+      "ssm:SendCommand",
+      "ssm:DescribeSessions",
+      "ssm:GetConnectionStatus",
+      "ssm:GetCommandInvocation"
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "ecs_exec_initiator_policy" {
+  name   = "ECSExecInitiatorPolicy"
+  policy = data.aws_iam_policy_document.ecs_exec_initiator_policy_doc.json
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_exec_initiator_attachment" {
+  role       = aws_iam_role.initiating_user_role.name  # Update this with the IAM user or role initiating the command
+  policy_arn = aws_iam_policy.ecs_exec_initiator_policy.arn
+}
