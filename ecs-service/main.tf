@@ -2,7 +2,8 @@ resource "aws_ecs_task_definition" "app" {
   family                   = var.app_name
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  execution_role_arn       = aws_iam_role.ecs_task_execution.arn
+  execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn # ECS execution role for logging and image pull
+  task_role_arn            = aws_iam_role.ecs_task_role.arn           # Task role for application access
   cpu                      = var.cpu
   memory                   = var.memory
   # 

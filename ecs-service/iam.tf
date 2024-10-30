@@ -1,6 +1,6 @@
-# Define the IAM role for the ECS task
-resource "aws_iam_role" "ecs_task_execution" {
-  name = "${var.app_name}-ecs-task-execution-role"
+# Execution Role for ECS Task Lifecycle Management
+resource "aws_iam_role" "ecs_task_execution_role" {
+  name = "${var.app_name}-ecs-execution-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
     Statement = [{
@@ -13,7 +13,13 @@ resource "aws_iam_role" "ecs_task_execution" {
   })
 }
 
-# Policy to allow creating CloudWatch Log Groups
+# Attach Amazon ECS Task Execution Role Policy for Image Pull and Log Permissions
+resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy" {
+  role       = aws_iam_role.ecs_task_execution_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}
+
+# Policy to Allow Creating CloudWatch Log Groups (optional)
 data "aws_iam_policy_document" "create_log_group_policy_doc" {
   statement {
     actions   = ["logs:CreateLogGroup"]
@@ -28,19 +34,28 @@ resource "aws_iam_policy" "create_log_group_policy" {
   policy      = data.aws_iam_policy_document.create_log_group_policy_doc.json
 }
 
-# Attach CloudWatch policy
+# Attach the CloudWatch Log Group Creation Policy
 resource "aws_iam_role_policy_attachment" "attach_create_log_group_policy" {
-  role       = aws_iam_role.ecs_task_execution.name
+  role       = aws_iam_role.ecs_task_execution_role.name
   policy_arn = aws_iam_policy.create_log_group_policy.arn
 }
 
-# Attach Amazon ECS Task Execution Role Policy
-resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy" {
-  role       = aws_iam_role.ecs_task_execution.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+# Task Role for Application-Level Permissions
+resource "aws_iam_role" "ecs_task_role" {
+  name = "${var.app_name}-ecs-task-role"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Effect = "Allow",
+      Principal = {
+        Service = "ecs-tasks.amazonaws.com"
+      },
+      Action = "sts:AssumeRole"
+    }]
+  })
 }
 
-# S3 Access Policy Document for All Files in the Bucket
+# S3 Access Policy for Application
 data "aws_iam_policy_document" "s3_access_policy_doc" {
   statement {
     actions   = ["s3:GetObject"]
@@ -49,21 +64,20 @@ data "aws_iam_policy_document" "s3_access_policy_doc" {
   }
 }
 
-# S3 Access Policy Resource
 resource "aws_iam_policy" "s3_access_policy" {
   name        = "${var.app_name}-s3-access-policy"
   description = "Policy to allow access to all files in the S3 bucket"
   policy      = data.aws_iam_policy_document.s3_access_policy_doc.json
 }
 
-# Conditionally Attach S3 Access Policy
+# Conditionally Attach S3 Access Policy to Task Role
 resource "aws_iam_role_policy_attachment" "attach_s3_access_policy" {
   count      = var.command != null ? 1 : 0 # Attach only if `command` is not null
-  role       = aws_iam_role.ecs_task_execution.name
+  role       = aws_iam_role.ecs_task_role.name
   policy_arn = aws_iam_policy.s3_access_policy.arn
 }
 
-# ECS exec
+# ECS Exec Policy for Application
 data "aws_iam_policy_document" "ecs_exec_policy" {
   statement {
     effect = "Allow"
@@ -78,36 +92,11 @@ data "aws_iam_policy_document" "ecs_exec_policy" {
 }
 
 resource "aws_iam_policy" "ecs_exec_policy" {
-  name   = "ECSExecPolicy"
+  name   = "${var.app_name}-ecs-exec-policy"
   policy = data.aws_iam_policy_document.ecs_exec_policy.json
 }
 
 resource "aws_iam_role_policy_attachment" "ecs_task_exec_attachment" {
-  role       = aws_iam_role.ecs_task_execution.name
+  role       = aws_iam_role.ecs_task_role.name
   policy_arn = aws_iam_policy.ecs_exec_policy.arn
-}
-
-data "aws_iam_policy_document" "ecs_exec_initiator_policy" {
-  statement {
-    effect = "Allow"
-    actions = [
-      "ecs:ExecuteCommand",
-      "ssm:StartSession",
-      "ssm:SendCommand",
-      "ssm:DescribeSessions",
-      "ssm:GetConnectionStatus",
-      "ssm:GetCommandInvocation"
-    ]
-    resources = ["*"]
-  }
-}
-
-resource "aws_iam_policy" "ecs_exec_initiator_policy" {
-  name   = "ECSExecInitiatorPolicy"
-  policy = data.aws_iam_policy_document.ecs_exec_initiator_policy.json
-}
-
-resource "aws_iam_user_policy_attachment" "ecs_exec_initiator_attachment" {
-  user       = data.aws_iam_user.initiating_user.user_name # Reference the IAM user from the data source
-  policy_arn = aws_iam_policy.ecs_exec_initiator_policy.arn
 }
