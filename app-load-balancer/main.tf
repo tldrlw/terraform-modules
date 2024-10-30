@@ -77,7 +77,7 @@ resource "aws_lb_listener_rule" "https" {
 resource "aws_lb_target_group" "self" {
   count       = length(var.target_group_and_listener_config) # Create target groups based on the length of the list
   name        = "${var.target_group_and_listener_config[count.index].name}-tg"
-  port        = 3000
+  port        = var.target_group_and_listener_config[count.index].port  # Reference port from variable
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
   target_type = "ip"

@@ -27,6 +27,7 @@ variable "target_group_and_listener_config" {
     name              = string
     domain            = string
     health_check_path = string
+    port              = number  # New field for port
   }))
 }
 
