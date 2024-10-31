@@ -73,3 +73,13 @@ variable "environment_variables" {
   }))
   default = []
 }
+
+variable "s3_ecs_config_files_access" {
+  type    = bool
+  default = false
+}
+
+variable "iam_user_for_container_shell" {
+  description = "The IAM user that should be allowed to run AWS Exec (e.g., shell into a container with e1s)"
+  type        = string
+}

@@ -16,6 +16,8 @@
 
 ## ecs-service
 
+- 10/30/24, added functionality to be able to shell into the container, e.g., using e1s, meant adding additional IAM policies, now IAM policies are split up into a task role and an execution role for better security and maintainability, task role allows for shelling into container and access to s3 for example, whereas execution role allows logging and being able to pull container images
+
 - To see this being implemented, check out https://github.com/tldrlw/blog-tldrlw/blob/main/infrastructure/ecs.tf
 
 ### future additions:

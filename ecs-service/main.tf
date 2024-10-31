@@ -2,7 +2,8 @@ resource "aws_ecs_task_definition" "app" {
   family                   = var.app_name
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  execution_role_arn       = aws_iam_role.ecs_task_execution.arn
+  execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn # ECS execution role for logging and image pull
+  task_role_arn            = aws_iam_role.ecs_task_role.arn           # Task role for application access
   cpu                      = var.cpu
   memory                   = var.memory
   # 
@@ -55,7 +56,8 @@ resource "aws_ecs_service" "app" {
   task_definition = aws_ecs_task_definition.app.arn
   desired_count   = var.task_count
   # ^ change to 1 or 2 when you want the task running, as opposed to 0
-  launch_type = "FARGATE"
+  launch_type            = "FARGATE"
+  enable_execute_command = true # Enables ECS Exec
   network_configuration {
     subnets          = var.subnets
     security_groups  = [aws_security_group.self.id]
