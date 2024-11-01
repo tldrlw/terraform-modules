@@ -83,3 +83,8 @@ variable "iam_user_for_container_shell" {
   description = "The IAM user that should be allowed to run AWS Exec (e.g., shell into a container with e1s)"
   type        = string
 }
+
+variable "is_grafana" {
+  type    = bool
+  default = false
+}
