@@ -74,9 +74,15 @@ variable "environment_variables" {
   default = []
 }
 
-variable "s3_ecs_config_files_access" {
-  type    = bool
-  default = false
+variable "s3_access" {
+  description = "if set to true, must provide bucket name set to `s3_bucket`"
+  type        = bool
+  default     = false
+}
+
+variable "s3_bucket" {
+  type    = string
+  default = ""
 }
 
 variable "iam_user_for_container_shell" {
