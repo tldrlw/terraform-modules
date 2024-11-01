@@ -57,24 +57,26 @@ resource "aws_iam_role" "ecs_task_role" {
 
 # S3 Access Policy for Application
 data "aws_iam_policy_document" "s3_access_policy_doc" {
+  count = var.s3_access ? 1 : 0 # Attach only if `var.s3_access` is true
   statement {
     actions   = ["s3:GetObject"]
     effect    = "Allow"
-    resources = ["arn:aws:s3:::tldrlw-ecs-config-files/*"] # Access all files in the bucket
+    resources = ["arn:aws:s3:::${var.s3_bucket}/*"] # Access all files in the bucket
   }
 }
 
 resource "aws_iam_policy" "s3_access_policy" {
+  count       = var.s3_access ? 1 : 0 # Attach only if `var.s3_access` is true
   name        = "${var.app_name}-s3-access-policy"
   description = "Policy to allow access to all files in the S3 bucket"
-  policy      = data.aws_iam_policy_document.s3_access_policy_doc.json
+  policy      = data.aws_iam_policy_document.s3_access_policy_doc[0].json
 }
 
 # Conditionally Attach S3 Access Policy to Task Role
 resource "aws_iam_role_policy_attachment" "attach_s3_access_policy" {
-  count      = var.s3_ecs_config_files_access != false ? 1 : 0 # Attach only if `var.s3_ecs_config_files_access` is not false
+  count      = var.s3_access ? 1 : 0 # Attach only if `var.s3_access` is true
   role       = aws_iam_role.ecs_task_role.name
-  policy_arn = aws_iam_policy.s3_access_policy.arn
+  policy_arn = aws_iam_policy.s3_access_policy[0].arn
 }
 
 # ECS Exec Policy for Application
