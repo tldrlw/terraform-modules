@@ -5,8 +5,8 @@
     "essential": true,
     "portMappings": [
       {
-        "containerPort": "${container_port}",
-        "hostPort": "${host_port}"
+        "containerPort": ${container_port},
+        "hostPort": ${host_port}
       }
     ],
     "logConfiguration": {
@@ -18,7 +18,7 @@
         "awslogs-stream-prefix": "ecs"
       }
     },
-    "environment": "${environment_variables}",
+    "environment": ${environment_variables},
     "command": ["/bin/sh", "-c", "${script}"]
   }
 ]
