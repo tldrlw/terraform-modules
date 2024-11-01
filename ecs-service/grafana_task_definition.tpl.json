@@ -19,6 +19,6 @@
       }
     },
     "environment": ${environment_variables},
-    "command": ["/bin/sh", "-c", "${script}"]
+    "command": ${script}
   }
 ]

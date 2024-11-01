@@ -50,7 +50,7 @@ resource "aws_ecs_task_definition" "app" {
       host_port             = var.host_port
       region                = data.aws_region.current.name
       environment_variables = jsonencode(var.environment_variables)
-      script                = var.is_grafana ? replace(file("${path.module}/grafana_script.sh"), "\n", " && ") : ""
+      script                = jsonencode(["/bin/sh", "-c", var.is_grafana ? replace(file("${path.module}/grafana_script.sh"), "\n", " && ") : ""])
     }
   )
 }
