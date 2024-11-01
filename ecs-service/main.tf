@@ -40,14 +40,8 @@ resource "aws_ecs_task_definition" "app" {
   # ^ since we could be building and pushing the Docker container on an M-series Mac: https://cloud.theodo.com/en/blog/essential-container-error-ecs
   # ^ won't need for nginx:latest since it's being pulled from Docker
   # docs on runtime platform: https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_RuntimePlatform.html
-  container_definitions = var.is_grafana ? data.template_file.grafana_template_json.rendered : data.template_file.template_json.rendered
-  # ^ Use the appropriate template file based on the is_grafana variable
-}
-# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_task_definition
-
-# Combine ./grafana_script.sh into a single line command for ECS Task definition
-data "template_file" "grafana_template_json" {
-  template = templatefile("${path.module}/grafana_task_definition.tpl.json", {
+  # Use the templatefile() function to load the appropriate JSON template
+  container_definitions = var.is_grafana ? templatefile("${path.module}/grafana_task_definition.tpl.json", {
     app_name       = var.app_name
     image          = "${var.ecr_repo_url}:${var.image_tag}"
     container_port = var.container_port
@@ -60,12 +54,7 @@ data "template_file" "grafana_template_json" {
       }
     ])
     script = replace(file("${path.module}/grafana_script.sh"), "\n", " && ")
-  })
-}
-# guidance on container definition log configuration: https://cloud.theodo.com/en/blog/essential-container-error-ecs and https://docs.aws.amazon.com/AmazonECS/latest/developerguide/specify-log-config.html
-
-data "template_file" "template_json" {
-  template = templatefile("${path.module}/task_definition.tpl.json", {
+    }) : templatefile("${path.module}/task_definition.tpl.json", {
     app_name       = var.app_name
     image          = "${var.ecr_repo_url}:${var.image_tag}"
     container_port = var.container_port
@@ -79,3 +68,39 @@ data "template_file" "template_json" {
     ])
   })
 }
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_task_definition
+
+# Combine ./grafana_script.sh into a single line command for ECS Task definition
+# data "template_file" "grafana_template_json" {
+#   template = templatefile("${path.module}/grafana_task_definition.tpl.json", {
+#     app_name       = var.app_name
+#     image          = "${var.ecr_repo_url}:${var.image_tag}"
+#     container_port = var.container_port
+#     host_port      = var.host_port
+#     region         = data.aws_region.current.name
+#     environment_variables = jsonencode([
+#       for env_var in var.environment_variables : {
+#         name  = env_var.name
+#         value = env_var.value
+#       }
+#     ])
+#     script = replace(file("${path.module}/grafana_script.sh"), "\n", " && ")
+#   })
+# }
+# guidance on container definition log configuration: https://cloud.theodo.com/en/blog/essential-container-error-ecs and https://docs.aws.amazon.com/AmazonECS/latest/developerguide/specify-log-config.html
+
+# data "template_file" "template_json" {
+#   template = templatefile("${path.module}/task_definition.tpl.json", {
+#     app_name       = var.app_name
+#     image          = "${var.ecr_repo_url}:${var.image_tag}"
+#     container_port = var.container_port
+#     host_port      = var.host_port
+#     region         = data.aws_region.current.name
+#     environment_variables = jsonencode([
+#       for env_var in var.environment_variables : {
+#         name  = env_var.name
+#         value = env_var.value
+#       }
+#     ])
+#   })
+# }
