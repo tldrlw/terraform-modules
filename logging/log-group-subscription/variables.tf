@@ -1,5 +1,5 @@
 variable "LOG_GROUP" {
-  type = map({
+  type = object({
     log_group     = string
     friendly_name = string
     arn           = string

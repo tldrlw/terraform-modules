@@ -45,7 +45,7 @@ variable "LINUX_ARM_64" {
 }
 
 variable "LOG_GROUPS" {
-  type = list(map({
+  type = list(object({
     log_group     = string
     friendly_name = string
     arn           = string

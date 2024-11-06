@@ -116,7 +116,7 @@ resource "aws_iam_role_policy_attachment" "log_shipper_logging" {
 }
 
 module "log_group_subscriptions" {
-  for_each             = toset(var.LOG_GROUPS)
+  for_each             = { for item in var.LOG_GROUPS : item.friendly_name => item }
   source               = "./log-group-subscription"
   LOG_GROUP            = each.value
   LAMBDA_FUNCTION_NAME = aws_lambda_function.log_shipper.function_name
