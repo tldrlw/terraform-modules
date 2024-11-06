@@ -10,24 +10,12 @@ variable "alb_name" {
   type = string
 }
 
-# variable "hostname" {
-#   type = string
-# }
-# variable "target_group_name" {
-#   type = string
-# }
-# variable "target_group_health_check" {
-#   type    = string
-#   default = "/"
-# }
-# ^ all 3 supplanted by config below (9/29/24)
-
 variable "target_group_and_listener_config" {
   type = list(object({
     name              = string
     domain            = string
     health_check_path = string
-    port              = number  # New field for port
+    port              = number # New field for port
   }))
 }
 
