@@ -1,5 +1,9 @@
-variable "LOG_GROUP_NAME" {
-  type = string
+variable "LOG_GROUP" {
+  type = object({
+    log_group     = string
+    friendly_name = string
+    arn           = string
+  })
 }
 
 variable "LAMBDA_FUNCTION_NAME" {

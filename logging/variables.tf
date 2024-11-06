@@ -45,7 +45,11 @@ variable "LINUX_ARM_64" {
 }
 
 variable "LOG_GROUPS" {
-  type = list(string)
+  type = list(object({
+    log_group     = string
+    friendly_name = string
+    arn           = string
+  }))
 }
 
 variable "LOKI_URL" {
