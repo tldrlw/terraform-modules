@@ -28,10 +28,6 @@ variable "ECS_TASK_COUNT_LOKI" {
   default = 1
 }
 
-variable "GF_DATASOURCE_LOKI_URL" {
-  type = string
-}
-
 variable "IMAGE_TAG_GRAFANA" {
   type    = string
   default = "latest"

@@ -35,7 +35,7 @@ resource "aws_lambda_function" "log_shipper" {
   filename = data.archive_file.log_shipper.output_path
   environment {
     variables = {
-      LOKI_URL = var.LOKI_URL
+      LOKI_URL = "${var.LOKI_URL}/loki/api/v1/push"
     }
   }
   vpc_config {

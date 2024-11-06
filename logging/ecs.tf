@@ -20,7 +20,7 @@ module "ecs_service_grafana" {
     { name = "GF_SECURITY_ADMIN_PASSWORD", value = var.PASSWORD_GRAFANA },
     { name = "GF_SERVER_PROTOCOL", value = "http" }, # Use HTTP if ALB terminates HTTPS
     { name = "GF_SERVER_HTTP_PORT", value = "3000" },
-    { name = "GF_DATASOURCE_LOKI_URL", value = var.GF_DATASOURCE_LOKI_URL }
+    { name = "GF_DATASOURCE_LOKI_URL", value = "${var.LOKI_URL}/loki" }
     # ^ Environment Variable (GF_DATASOURCE_LOKI_URL): While not required for provisioning, the GF_DATASOURCE_LOKI_URL environment variable can act as a backup configuration reference if you ever define the data source dynamically.
   ]
   linux_arm64 = var.LINUX_ARM_64
