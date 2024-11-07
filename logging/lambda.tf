@@ -2,7 +2,7 @@
 resource "aws_security_group" "log_shipper" {
   vpc_id                 = var.VPC_ID
   name                   = "log-shipper-${var.ORG_NAME}"
-  description            = "Security group for log-shipper-${var.ORG_NAME} λ function"
+  description            = "Security group for log-shipper-${var.ORG_NAME} Lambda function"
   revoke_rules_on_delete = true
 }
 
