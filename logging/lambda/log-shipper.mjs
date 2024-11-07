@@ -1,5 +1,4 @@
 import { gunzipSync } from "zlib";
-import axios from "axios";
 
 // Lambda handler function
 export const handler = async (event) => {
@@ -31,10 +30,18 @@ export const handler = async (event) => {
       ],
     };
 
-    // Send logs to Loki using Axios
-    const response = await axios.post(lokiUrl, data, {
+    // Send logs to Loki using the Fetch API
+    const response = await fetch(lokiUrl, {
+      method: "POST",
       headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
     });
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to forward logs to Loki: ${response.status} ${response.statusText}`
+      );
+    }
 
     console.log("Response from Loki:", response.status, response.statusText);
   } catch (error) {
