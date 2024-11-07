@@ -38,7 +38,7 @@ variable "IMAGE_TAG_LOKI" {
   default = "latest"
 }
 
-variable "LINUX_ARM_64" {
+variable "LINUX_ARM64" {
   description = "set to true if building and pushing images to ECR on M-series Macs, personal use case: since building and pushing (locally) custom grafana and loki images (see blog-tldrlw repo > infrastructure/grafana-loki/docker-push-grafana.sh and infrastructure/grafana-loki/docker-push-loki.sh)"
   type        = bool
   default     = false

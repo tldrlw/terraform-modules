@@ -23,7 +23,7 @@ module "ecs_service_grafana" {
     { name = "GF_DATASOURCE_LOKI_URL", value = "${var.LOKI_URL}/loki" }
     # ^ Environment Variable (GF_DATASOURCE_LOKI_URL): While not required for provisioning, the GF_DATASOURCE_LOKI_URL environment variable can act as a backup configuration reference if you ever define the data source dynamically.
   ]
-  linux_arm64 = var.LINUX_ARM_64
+  linux_arm64 = var.LINUX_ARM64
   # ^ set to true if building and pushing images to ECR on M-series Macs:
   # since building and pushing (locally) a custom grafana image (see infrastructure/grafana-loki/docker-push-grafana.sh)
 }
@@ -56,7 +56,7 @@ resource "aws_ecs_task_definition" "loki" {
   memory                   = "512"
   cpu                      = "256"
   dynamic "runtime_platform" {
-    for_each = var.LINUX_ARM_64 ? [1] : []
+    for_each = var.LINUX_ARM64 ? [1] : []
     content {
       operating_system_family = "LINUX"
       cpu_architecture        = "ARM64"
