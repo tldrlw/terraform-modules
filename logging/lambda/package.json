@@ -1,0 +1,11 @@
+{
+  "name": "terraform-modules-logging",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Refayat Haque",
+  "license": "ISC",
+  "description": "https://github.com/tldrlw/terraform-modules/tree/dev/logging",
+  "type": "module"
+}

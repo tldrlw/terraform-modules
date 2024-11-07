@@ -20,6 +20,12 @@
 
 - To see this being implemented, check out https://github.com/tldrlw/blog-tldrlw/blob/main/infrastructure/ecs.tf
 
+## logging
+
+- 11/6/24, will need to have loki and grafana images built and pushed to ECR prior to instantiating module, calling module will also need to have ECR repos (for loki and grafana) managed prior
+  - currently set up to have a single λ function push multiple cloudwatch log groups to loki, but for scaling, could explore having multiple λ functions in the future
+  - assumes that this 'logging' module instantiation is for an entire organization, i.e., logging will cover all infrastructure components that are part of `tldrlw`, meaning all apps (e.g., monza, blog, etc.) and their associated components like λ functions can/will be included in this logging setup
+
 ### future additions:
 
 - **DONE**, added `linux_arm64` boolean variable

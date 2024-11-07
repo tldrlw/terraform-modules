@@ -33,3 +33,5 @@
 # Ignore any sensitive or configuration files that shouldn't be committed
 **/*.secret
 **/*.env
+
+logging/lambda/node_modules
