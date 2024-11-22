@@ -51,9 +51,9 @@ resource "aws_lb_listener" "https" {
 # Will handle the routing of traffic to the correct target group via listener rules based on the host header (domain) or other conditions.
 
 resource "aws_lb_listener_rule" "https" {
-  count        = length(var.domain_and_certificate_arn_config) # Create listener rules based on the number of target groups
-  listener_arn = aws_lb_listener.https.arn
-  priority     = 100 + count.index # Ensure a unique priority by adding the index to a base value
+  count        = length(var.domain_and_certificate_arn_config) # Create listener rules based on the number of domains
+  listener_arn = aws_lb_listener.https[count.index].arn        # Reference the specific instance of the listener
+  priority     = 100 + count.index                             # Ensure a unique priority by adding the index to a base value
   action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.self[count.index].arn # Forward traffic to the respective target group
