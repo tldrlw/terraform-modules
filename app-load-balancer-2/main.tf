@@ -71,7 +71,7 @@ resource "aws_lb_listener_rule" "https" {
 }
 
 resource "aws_lb_target_group" "self" {
-  name        = "${var.APP_NAME}}-tg"
+  name        = "${var.APP_NAME}-tg"
   port        = var.APP_PORT # Reference port from variable
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
