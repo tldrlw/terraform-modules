@@ -56,7 +56,7 @@ resource "aws_lb_listener_rule" "https" {
   priority     = 100 + count.index                             # Ensure a unique priority by adding the index to a base value
   action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.self[count.index].arn # Forward traffic to the respective target group
+    target_group_arn = aws_lb_target_group.self.arn # Use the single target group ARN
   }
   condition {
     path_pattern {
