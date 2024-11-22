@@ -56,8 +56,8 @@ resource "aws_lb_listener_certificate" "https" {
 
 resource "aws_lb_listener_rule" "https" {
   count        = length(var.domain_and_certificate_arn_config) # Create listener rules based on the number of domains
-  listener_arn = aws_lb_listener.https[count.index].arn        # Reference the specific instance of the listener
-  priority     = 100 + count.index                             # Ensure a unique priority by adding the index to a base value
+  listener_arn = aws_lb_listener.https.arn
+  priority     = 100 + count.index # Ensure a unique priority by adding the index to a base value
   action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.self.arn # Use the single target group ARN
