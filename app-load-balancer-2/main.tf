@@ -33,12 +33,11 @@ resource "aws_lb_listener" "http_redirect_to_https" {
 }
 
 resource "aws_lb_listener" "https" {
-  count             = length(var.domain_and_certificate_arn_config) # Create a listener for each domain
   load_balancer_arn = aws_lb.self.arn
   port              = "443"
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-2016-08"
-  certificate_arn   = var.domain_and_certificate_arn_config[count.index].certificate_arn # Use certificate ARN from the variable
+  certificate_arn   = var.domain_and_certificate_arn_config[0].certificate_arn # Use the first certificate in the list
   default_action {
     type = "fixed-response"
     fixed_response {
@@ -48,7 +47,12 @@ resource "aws_lb_listener" "https" {
     }
   }
 }
-# Will handle the routing of traffic to the correct target group via listener rules based on the host header (domain) or other conditions.
+
+resource "aws_lb_listener_certificate" "https" {
+  count           = length(var.domain_and_certificate_arn_config) - 1 # Add certificates for remaining domains
+  listener_arn    = aws_lb_listener.https.arn
+  certificate_arn = var.domain_and_certificate_arn_config[count.index + 1].certificate_arn # Skip the first certificate
+}
 
 resource "aws_lb_listener_rule" "https" {
   count        = length(var.domain_and_certificate_arn_config) # Create listener rules based on the number of domains
