@@ -14,6 +14,11 @@
 
 - 9/29/2024, added support for single ALB to have multiple listener rules and target groups to support multiple apps of different subdomains, e.g., using a single ALB to route traffic to either blog.tldrlw.com or monza.tldrlw.com - benefit to this approach as opposed to 1 ALB : 1 app is cost savings, especially if multiple apps are running in the same region
 
+## app-load-balancer-2
+
+- This module sets up an Application Load Balancer (ALB) that routes traffic from multiple domains or hostnames (e.g., hello.com and world.com) to a single target group connected to an ECS service. It creates a single HTTPS listener on port 443, supports multiple domain-specific SSL certificates using AWS ALB Listener Certificates, and uses listener rules to route traffic based on the host_header condition. This ensures all traffic from the specified domains is securely directed to the same ECS service backend while maintaining flexibility for future domain additions.
+  - 11/22/204 - for radiotodaydhaka.com and radiotodaybd.fm (domain registered in GoDaddy, route53 hosted zone nameservers all added to GoDaddy) to serve traffic to the ecs service defined in repo `radiotodaydhaka`
+
 ## ecs-service
 
 - 10/30/24, added functionality to be able to shell into the container, e.g., using e1s, meant adding additional IAM policies, now IAM policies are split up into a task role and an execution role for better security and maintainability, task role allows for shelling into container and access to s3 for example, whereas execution role allows logging and being able to pull container images
