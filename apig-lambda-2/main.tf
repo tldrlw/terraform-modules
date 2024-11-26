@@ -10,7 +10,7 @@ data "archive_file" "lambda" {
 resource "aws_lambda_function" "main" {
   filename         = "${var.NAME}.zip"
   function_name    = var.NAME
-  role             = aws_iam_role.lambda.arn
+  role             = aws_iam_role.main.arn
   handler          = "${var.HANDLER_FILE_PREFIX}.lambdaHandler"
   source_code_hash = data.archive_file.lambda.output_base64sha256
   runtime          = "nodejs20.x"

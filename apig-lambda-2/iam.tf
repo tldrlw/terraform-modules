@@ -27,7 +27,7 @@ data "aws_iam_policy_document" "dydb" {
 resource "aws_iam_policy" "dydb" {
   name   = "${var.NAME}-to-dydb"
   path   = "/lambda/"
-  policy = data.aws_iam_policy_document.lambda_to_dydb.json
+  policy = data.aws_iam_policy_document.dydb.json
 }
 
 resource "aws_iam_role_policy_attachment" "dydb" {
@@ -56,7 +56,7 @@ resource "aws_iam_policy" "logging" {
 }
 
 resource "aws_iam_role_policy_attachment" "logging" {
-  role       = aws_iam_role.lambda.name
+  role       = aws_iam_role.main.name
   policy_arn = aws_iam_policy.logging.arn
 }
 
