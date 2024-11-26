@@ -4,6 +4,8 @@
 
 - Added variable `enable_cors` to provision additional APIG config if this is needed, e.g., next.js app is making calls to Lambda from client components as opposed to server-side components
 
+## apig-lambda-2
+
 ## app-load-balancer
 
 - To see this being implemented, check out https://github.com/tldrlw/blog-tldrlw/blob/main/infrastructure/alb.tf
