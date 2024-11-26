@@ -6,6 +6,8 @@
 
 ## apig-lambda-2
 
+- This Lambda module provisions secure and tightly restricted Lambda functions within private subnets, ensuring they are isolated from public internet access. The Lambda functions are accessible exclusively through a private REST API Gateway endpoint, which enforces secure communication from an ECS task operating within the same VPC. Additionally, the Lambda functions interact with DynamoDB through a VPC Gateway Endpoint, eliminating the need for a NAT Gateway. This configuration ensures a highly secure, private, and cost-efficient architecture, where the Lambda functions are shielded from unauthorized access and can communicate seamlessly with both the ECS task and DynamoDB.
+
 ## app-load-balancer
 
 - To see this being implemented, check out https://github.com/tldrlw/blog-tldrlw/blob/main/infrastructure/alb.tf
