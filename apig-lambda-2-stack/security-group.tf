@@ -22,10 +22,8 @@ resource "aws_vpc_security_group_ingress_rule" "api_gateway_ingress" {
 
 resource "aws_vpc_security_group_egress_rule" "api_gateway_egress" {
   security_group_id = aws_security_group.api_gateway.id
-  from_port         = 0
-  to_port           = 0
-  ip_protocol       = "-1"
-  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1"        # Allow all protocols
+  cidr_ipv4         = "0.0.0.0/0" # Allow traffic to all destinations
   description       = "Allow all outbound traffic"
   tags = {
     Name = "${var.APP_NAME}-api-gateway"
