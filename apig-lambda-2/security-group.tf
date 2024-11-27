@@ -1,5 +1,6 @@
 # Security Group for Lambda
 resource "aws_security_group" "main" {
+  depends_on = [ aws_lambda_function.main ]
   name        = "${var.NAME}-lambda"
   description = "Security group for Lambda functions"
   vpc_id      = var.VPC_ID
