@@ -16,6 +16,8 @@
 - includes required infrastructure for `apig-lambda-2` instantiations
 - The term “stack” is an ideal choice for the module name because it effectively conveys the purpose and functionality of the module. It is descriptive, indicating that the module bundles together all the necessary resources—such as API Gateway, VPC endpoints, private subnets, and other infrastructure—required to support a Lambda function.
   - The term also highlights the modular nature of the setup, as it allows for reusable and composable infrastructure components that can be instantiated multiple times for different use cases. Furthermore, _“stack” implies scalability, suggesting that the module is designed to grow or adapt by including additional resources as requirements evolve._ This makes the name intuitive, flexible, and aligned with best practices in infrastructure as code.
+- We moved the API Gateway deployment and stage out of the lambda_stack module to avoid a cyclical dependency and ensure flexibility as additional Lambda module instances are added. The lambda_stack module manages the API Gateway’s resources, such as REST APIs, resources, and VPC integrations, which are prerequisites for the methods and integrations created dynamically by Lambda modules.
+  - By centralizing the deployment and stage in the root module, we allow the deployment to depend explicitly on the outputs of multiple Lambda modules (e.g., methods and integrations). This approach ensures that the deployment captures all changes, avoids dependency conflicts, and provides scalability, as new Lambda modules can be seamlessly integrated without modifying the lambda_stack module.
 
 ## app-load-balancer
 
