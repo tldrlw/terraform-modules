@@ -26,3 +26,10 @@ variable "REGION" {
 variable "VPC_ID" {
   type = string
 }
+
+variable "PRIVATE_APIG_METHODS_AND_URIS" {
+  type = map(object({
+    method_id = string
+    uri       = string
+  }))
+}
