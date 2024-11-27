@@ -14,7 +14,7 @@ resource "aws_vpc_security_group_ingress_rule" "main" {
   from_port                    = 443
   to_port                      = 443
   ip_protocol                  = "tcp"
-  referenced_security_group_id = var.APIG_SECURITY_GROUP_ID
+  referenced_security_group_id = var.PRIVATE_APIG_SECURITY_GROUP_ID
   description                  = "Allow traffic from API Gateway"
   tags = {
     Name = "${var.NAME}-lambda"
