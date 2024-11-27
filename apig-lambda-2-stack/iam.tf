@@ -1,4 +1,4 @@
-data "aws_iam_policy_document" "private_api_policy" {
+data "aws_iam_policy_document" "private_apig" {
   statement {
     effect = "Allow"
     principals {
@@ -17,9 +17,9 @@ data "aws_iam_policy_document" "private_api_policy" {
   }
 }
 
-resource "aws_api_gateway_rest_api_policy" "private_api_policy" {
+resource "aws_api_gateway_rest_api_policy" "private" {
   rest_api_id = aws_api_gateway_rest_api.private.id
-  policy      = data.aws_iam_policy_document.private_api_policy.json
+  policy      = data.aws_iam_policy_document.private_apig.json
 }
 
 # private REST APIs in API Gateway require a resource policy to define who or what can access the API. This is a security measure to ensure private APIs are explicitly restricted to allowed principals or IP addresses.

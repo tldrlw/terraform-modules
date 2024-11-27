@@ -20,25 +20,3 @@ resource "aws_api_gateway_resource" "self" {
   parent_id   = aws_api_gateway_rest_api.private.root_resource_id
   path_part   = each.value
 }
-
-resource "aws_api_gateway_deployment" "private" {
-  depends_on = concat(
-    [aws_api_gateway_rest_api_policy.private_api_policy],
-    [for method in var.api_methods_and_uris : method.method_id]
-  )
-  rest_api_id = aws_api_gateway_rest_api.private.id
-  triggers = {
-    redeployment = sha1(jsonencode(aws_api_gateway_rest_api.private))
-  }
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/api_gateway_deployment
-
-resource "aws_api_gateway_stage" "main" {
-  rest_api_id   = aws_api_gateway_rest_api.private.id
-  stage_name    = var.PRIVATE_APIG_STAGE_NAME
-  deployment_id = aws_api_gateway_deployment.private.id
-}
-# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/api_gateway_stage
