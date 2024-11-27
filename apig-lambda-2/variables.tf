@@ -1,4 +1,4 @@
-variable "APIG_SECURITY_GROUP_ID" {
+variable "PRIVATE_APIG_SECURITY_GROUP_ID" {
   type = string
 }
 
@@ -34,15 +34,15 @@ variable "NAME" {
   type = string
 }
 
-variable "PRIVATE_APIG_REST_API_EXECUTION_ARN" {
+variable "PRIVATE_APIG_EXECUTION_ARN" {
   type = string
 }
 
-variable "PRIVATE_APIG_REST_API_ID" {
+variable "PRIVATE_APIG_ID" {
   type = string
 }
 
-variable "PRIVATE_APIG_REST_API_RESOURCE_ID" {
+variable "PRIVATE_APIG_RESOURCE_ID" {
   type = string
 }
 

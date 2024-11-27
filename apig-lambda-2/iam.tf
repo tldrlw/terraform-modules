@@ -65,7 +65,7 @@ resource "aws_lambda_permission" "api_gateway_invoke" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.main.arn
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${var.PRIVATE_APIG_REST_API_EXECUTION_ARN}/*/*/*"
+  source_arn    = "${var.PRIVATE_APIG_EXECUTION_ARN}/*/*/*"
   # source_arn = "arn:aws:execute-api:${var.REGION}:${data.aws_caller_identity.current.account_id}:${aws_api_gateway_rest_api.private_api.id}/*"
 }
 
