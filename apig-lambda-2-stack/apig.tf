@@ -15,7 +15,7 @@ resource "aws_api_gateway_rest_api" "private" {
 # Create a private API: https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-private-api-create.html
 
 resource "aws_api_gateway_resource" "self" {
-  for_each    = toset(var.APIG_RESOURCES) # Ensure unique resource paths
+  for_each    = toset(var.PRIVATE_APIG_RESOURCES) # Ensure unique resource paths
   rest_api_id = aws_api_gateway_rest_api.private.id
   parent_id   = aws_api_gateway_rest_api.private.root_resource_id
   path_part   = each.value
@@ -35,7 +35,7 @@ resource "aws_api_gateway_deployment" "private" {
 
 resource "aws_api_gateway_stage" "main" {
   rest_api_id   = aws_api_gateway_rest_api.private.id
-  stage_name    = var.APIG_STAGE_NAME
+  stage_name    = var.PRIVATE_APIG_STAGE_NAME
   deployment_id = aws_api_gateway_deployment.private.id
 }
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/api_gateway_stage
