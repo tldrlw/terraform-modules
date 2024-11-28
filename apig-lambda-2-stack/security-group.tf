@@ -26,7 +26,7 @@ resource "aws_vpc_security_group_ingress_rule" "api_gateway_local_ingress" {
   from_port         = 443
   to_port           = 443
   ip_protocol       = "tcp"
-  cidr_ipv4         = [var.LOCAL_IP] # Replace with your actual IP address
+  cidr_ipv4         = var.LOCAL_IP # Replace with your actual IP address
   description       = "Allow HTTPS traffic from local machine for development"
   tags = {
     Name = "${var.APP_NAME}-api-gateway-local-access"
