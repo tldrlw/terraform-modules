@@ -1,7 +1,3 @@
-variable "LOCAL_IP" {
-  type = string
-}
-
 variable "PRIVATE_APIG_RESOURCES" {
   description = "List of API Gateway resource path parts to create"
   type        = list(string)
@@ -28,5 +24,9 @@ variable "REGION" {
 }
 
 variable "VPC_ID" {
+  type = string
+}
+
+variable "VPN_CIDR" {
   type = string
 }
