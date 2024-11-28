@@ -4,6 +4,10 @@ variable "CLIENT_CIDR_BLOCK" {
   # default     = "10.1.0.0/22"
 }
 
+variable "DOMAIN" {
+  type = string
+}
+
 variable "ROUTE_53_ZONE_ID" {
   description = "Zone ID of the Route 53 hosted zone for certificate validation"
   type        = string

@@ -53,7 +53,9 @@ resource "aws_ec2_client_vpn_endpoint" "main" {
   connection_log_options {
     enabled = false
   }
+  # Explicitly include the VPC ID for the associated security groups
   security_group_ids = [aws_security_group.client_vpn.id]
+  vpc_id             = var.VPC_ID # Add this line
   split_tunnel       = true
   tags = {
     Name = "Client VPN Endpoint"
@@ -75,7 +77,7 @@ resource "aws_ec2_client_vpn_route" "vpc_route" {
 }
 
 resource "aws_acm_certificate" "server_cert" {
-  domain_name       = "vpn.tldrlw.com" # Replace with your desired domain
+  domain_name       = "vpn.${var.DOMAIN}" # Replace with your desired domain
   validation_method = "DNS"
   tags = {
     Name = "Client VPN Server Certificate"
