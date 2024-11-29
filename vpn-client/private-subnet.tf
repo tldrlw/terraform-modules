@@ -20,7 +20,7 @@ resource "aws_route_table" "private_route_table" {
 
 resource "aws_route" "vpn_to_api_gateway" {
   route_table_id         = aws_route_table.private_route_table.id
-  destination_cidr_block = "0.0.0.0/0"              # All traffic, or restrict to API Gateway traffic as needed
+  # destination_cidr_block = "0.0.0.0/0"              # All traffic, or restrict to API Gateway traffic as needed
   vpc_endpoint_id        = var.APIG_VPC_ENDPOINT_ID # Replace with the VPC endpoint ID for API Gateway
 }
 
