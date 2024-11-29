@@ -57,7 +57,7 @@ resource "aws_s3_object" "vpn-config-file" {
 client
 dev tun
 proto ${aws_ec2_client_vpn_endpoint.main.transport_protocol}
-remote ${aws_ec2_client_vpn_endpoint.main.id}.prod.clientvpn.${var.REGION}.amazonaws.com ${aws_ec2_client_vpn_endpoint.main.vpn_port}
+remote ${aws_ec2_client_vpn_endpoint.main.dns_name} ${aws_ec2_client_vpn_endpoint.main.vpn_port}
 remote-random-hostname
 resolv-retry infinite
 nobind
@@ -65,6 +65,12 @@ remote-cert-tls server
 cipher AES-256-GCM
 --inactive ${var.VPN_INACTIVE_PERIOD} 100
 verb 3
+
+# DNS Server for Private VPC Resolution
+dhcp-option DNS 169.254.169.253
+
+# Routing Traffic for VPC CIDR
+route ${var.VPC_CIDR} 255.255.0.0
 
 <ca>
 ${aws_ssm_parameter.vpn_ca_cert.value}

@@ -23,6 +23,12 @@ resource "aws_ec2_client_vpn_endpoint" "main" {
   }
 }
 
+resource "aws_ec2_client_vpn_route" "dns_route" {
+  client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.main.id
+  destination_cidr_block = "169.254.169.253/32"
+  target_vpc_subnet_id   = aws_subnet.private.id
+}
+
 resource "aws_ec2_client_vpn_authorization_rule" "allow_all" {
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.main.id
   target_network_cidr    = var.VPC_CIDR # e.g., "10.0.0.0/16"
