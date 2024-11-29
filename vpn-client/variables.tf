@@ -7,6 +7,10 @@ variable "DOMAIN" {
   type = string
 }
 
+variable "PRIVATE_SUBNET_CIDR" {
+  type = string
+}
+
 variable "ROUTE_53_ZONE_ID" {
   description = "Zone ID of the Route 53 hosted zone for certificate validation"
   type        = string

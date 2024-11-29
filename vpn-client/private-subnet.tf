@@ -1,7 +1,7 @@
 # Create a Single Private Subnet
 resource "aws_subnet" "private" {
   vpc_id                  = var.VPC_ID
-  cidr_block              = "10.0.20.0/24" # Adjusted range for the single VPN subnet
+  cidr_block              = var.PRIVATE_SUBNET_CIDR
   availability_zone       = data.aws_availability_zones.available.names[0]
   map_public_ip_on_launch = false
   tags = {
