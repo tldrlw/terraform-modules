@@ -48,7 +48,7 @@
 
 ## vpn-client
 
-- got some help from https://registry.terraform.io/modules/babicamir/vpn-client/aws/latest
+- got some help from https://registry.terraform.io/modules/babicamir/vpn-client/aws/latest, and if, in the future, I want to have more than one VPN profile I can use this since he set up the module to serve that purpose
 
 ### future additions:
 

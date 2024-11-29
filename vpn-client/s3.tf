@@ -33,8 +33,8 @@ data "aws_iam_policy_document" "s3_vpn_config_file" {
     actions = ["s3:*"]
     effect  = "Deny"
     resources = [
-      "arn:aws:s3:::${lower(var.PROJECT)}-${var.NAME}-vpn-config-files",
-      "arn:aws:s3:::${lower(var.PROJECT)}-${var.NAME}-vpn-config-files/*"
+      "arn:aws:s3:::${lower(var.PROJECT)}-${var.NAME}-vpn-config-files",  # Bucket ARN
+      "arn:aws:s3:::${lower(var.PROJECT)}-${var.NAME}-vpn-config-files/*" # Objects within the bucket
     ]
     condition {
       test     = "Bool"
