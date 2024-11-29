@@ -24,10 +24,10 @@ resource "aws_route_table_association" "private_subnet_association" {
 }
 
 resource "aws_cloudwatch_log_group" "vpn_logs" {
-  name              = "vpn-log-group"
+  name              = "/aws/vpn/vpn-log-group"
   retention_in_days = 30 # Adjust retention period as needed
   tags = {
-    Name = "VPN Log Group"
+    Name = "VPN Logs"
   }
 }
 
