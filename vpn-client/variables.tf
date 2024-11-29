@@ -1,7 +1,6 @@
-variable "CLIENT_CIDR_BLOCK" {
+variable "CLIENT_CIDR" {
   type        = string
   description = "Client CIDR block for the VPN endpoint"
-  # default     = "10.1.0.0/22"
 }
 
 variable "DOMAIN" {
@@ -13,6 +12,10 @@ variable "ROUTE_53_ZONE_ID" {
   type        = string
 }
 
+variable "TRUSTED_CIDR" {
+  type = string
+}
+
 variable "VPC_CIDR" {
   type = string
 }
@@ -20,3 +23,4 @@ variable "VPC_CIDR" {
 variable "VPC_ID" {
   type = string
 }
+

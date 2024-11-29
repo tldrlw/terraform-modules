@@ -13,7 +13,7 @@ resource "aws_vpc_security_group_ingress_rule" "client_vpn_ingress" {
   from_port         = 443
   to_port           = 443
   ip_protocol       = "tcp"
-  cidr_ipv4         = "0.0.0.0/0" # Adjust for security
+  cidr_ipv4         = var.TRUSTED_CIDR
   description       = "Allow HTTPS traffic from VPN clients"
 }
 
@@ -28,7 +28,7 @@ resource "aws_vpc_security_group_egress_rule" "client_vpn_egress" {
 # Ingress Rule for VPN Client-to-VPC Traffic
 resource "aws_vpc_security_group_ingress_rule" "vpn_client_to_vpc" {
   security_group_id = aws_security_group.client_vpn.id
-  ip_protocol       = "-1"          # Allow all protocols
-  cidr_ipv4         = "10.0.0.0/16" # Replace with your desired range
+  ip_protocol       = "-1" # Allow all protocols
+  cidr_ipv4         = var.CLIENT_CIDR
   description       = "Allow all protocols from VPN clients"
 }
