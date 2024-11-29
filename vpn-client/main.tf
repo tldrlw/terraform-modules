@@ -31,6 +31,11 @@ resource "aws_cloudwatch_log_group" "vpn_logs" {
   }
 }
 
+resource "aws_cloudwatch_log_stream" "vpn_log_stream" {
+  name           = "vpn-log-stream"
+  log_group_name = aws_cloudwatch_log_group.vpn_logs.name
+}
+
 # Client VPN Endpoint
 resource "aws_ec2_client_vpn_endpoint" "main" {
   client_cidr_block = var.CLIENT_CIDR_BLOCK # Client IP range, must not overlap with the VPC CIDR
@@ -43,7 +48,7 @@ resource "aws_ec2_client_vpn_endpoint" "main" {
   connection_log_options {
     enabled               = true
     cloudwatch_log_group  = aws_cloudwatch_log_group.vpn_logs.name
-    cloudwatch_log_stream = "vpn-log-stream"
+    cloudwatch_log_stream = aws_cloudwatch_log_stream.vpn_log_stream.name
   }
   # Explicitly include the VPC ID for the associated security groups
   security_group_ids = [aws_security_group.client_vpn.id]
