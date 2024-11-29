@@ -44,6 +44,12 @@ resource "aws_ec2_client_vpn_endpoint" "main" {
   }
 }
 
+resource "aws_ec2_client_vpn_authorization_rule" "allow_all" {
+  client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.main.id
+  target_network_cidr    = var.VPC_CIDR # e.g., "10.0.0.0/16"
+  authorize_all_groups   = true
+}
+
 # Associate the Client VPN Endpoint with a Single Private Subnet
 resource "aws_ec2_client_vpn_network_association" "main" {
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.main.id
