@@ -33,14 +33,14 @@ resource "aws_ec2_client_vpn_endpoint" "main" {
 # Associate the Client VPN Endpoint with a Single Private Subnet
 resource "aws_ec2_client_vpn_network_association" "main" {
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.main.id
-  subnet_id              = aws_subnet.private[0].id
+  subnet_id              = aws_subnet.private.id
   depends_on             = [aws_security_group.client_vpn]
 }
 
 resource "aws_ec2_client_vpn_route" "vpc_route" {
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.main.id
   destination_cidr_block = var.VPC_CIDR # Example: "10.0.0.0/16"
-  target_vpc_subnet_id   = aws_subnet.private[0].id
+  target_vpc_subnet_id   = aws_subnet.private.id
 }
 
 resource "aws_acm_certificate" "server_cert" {
