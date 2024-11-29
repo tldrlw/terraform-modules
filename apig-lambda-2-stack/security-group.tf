@@ -19,6 +19,19 @@ resource "aws_vpc_security_group_ingress_rule" "api_gateway_ingress" {
     Name = "${var.APP_NAME}-api-gateway"
   }
 }
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc_security_group_ingress_rule
+
+resource "aws_vpc_security_group_ingress_rule" "api_gateway_vpn_ingress" {
+  security_group_id = aws_security_group.api_gateway.id
+  from_port         = 443
+  to_port           = 443
+  ip_protocol       = "tcp"
+  cidr_ipv4         = var.VPN_CIDR # Replace with the CIDR block of your Client VPN
+  description       = "Allow HTTPS traffic from VPN clients"
+  tags = {
+    Name = "${var.APP_NAME}-api-gateway-vpn-access"
+  }
+}
 
 resource "aws_vpc_security_group_egress_rule" "api_gateway_egress" {
   security_group_id = aws_security_group.api_gateway.id

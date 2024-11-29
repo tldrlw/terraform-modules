@@ -26,3 +26,7 @@ variable "REGION" {
 variable "VPC_ID" {
   type = string
 }
+
+variable "VPN_CIDR" {
+  type = string
+}
