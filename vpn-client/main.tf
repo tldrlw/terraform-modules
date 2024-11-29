@@ -1,16 +1,3 @@
-resource "aws_cloudwatch_log_group" "vpn_logs" {
-  name              = "/aws/vpn/vpn-log-group"
-  retention_in_days = 30 # Adjust retention period as needed
-  tags = {
-    Name = "VPN Logs"
-  }
-}
-
-resource "aws_cloudwatch_log_stream" "vpn_log_stream" {
-  name           = "vpn-log-stream"
-  log_group_name = aws_cloudwatch_log_group.vpn_logs.name
-}
-
 # Client VPN Endpoint
 resource "aws_ec2_client_vpn_endpoint" "main" {
   client_cidr_block = var.CLIENT_CIDR # Client IP range, must not overlap with the VPC CIDR
@@ -29,6 +16,7 @@ resource "aws_ec2_client_vpn_endpoint" "main" {
   security_group_ids = [aws_security_group.client_vpn.id]
   vpc_id             = var.VPC_ID # Add this line
   split_tunnel       = true
+  # Your configuration already has split_tunnel = true, meaning only traffic destined for the VPC CIDR or routes explicitly defined (e.g., 0.0.0.0/0) will go through the VPN. Other internet-bound traffic from your device will bypass the VPN and go through your normal internet connection.
   tags = {
     Name = "Client VPN Endpoint"
   }
@@ -45,12 +33,6 @@ resource "aws_ec2_client_vpn_network_association" "main" {
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.main.id
   subnet_id              = aws_subnet.private.id
   depends_on             = [aws_security_group.client_vpn]
-}
-
-resource "aws_ec2_client_vpn_route" "vpn_internet_route" {
-  client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.main.id
-  destination_cidr_block = "0.0.0.0/0"
-  target_vpc_subnet_id   = aws_subnet.private.id
 }
 
 # resource "aws_ec2_client_vpn_route" "vpc_route" {
