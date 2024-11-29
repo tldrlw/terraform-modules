@@ -18,6 +18,12 @@ resource "aws_route_table" "private_route_table" {
 }
 # Your private subnet’s route table determines where traffic from instances in the subnet (including VPN clients) is sent.
 
+resource "aws_route" "vpn_to_api_gateway" {
+  route_table_id         = aws_route_table.private_route_table.id
+  destination_cidr_block = "0.0.0.0/0"              # All traffic, or restrict to API Gateway traffic as needed
+  vpc_endpoint_id        = var.APIG_VPC_ENDPOINT_ID # Replace with the VPC endpoint ID for API Gateway
+}
+
 # Associate the Subnet with the Private Route Table
 resource "aws_route_table_association" "private_subnet_association" {
   subnet_id      = aws_subnet.private.id

@@ -1,3 +1,7 @@
+variable "APIG_VPC_ENDPOINT_ID" {
+  type = string
+}
+
 variable "CLIENT_CIDR" {
   type        = string
   description = "Client CIDR block for the VPN endpoint"
