@@ -3,20 +3,7 @@ variable "CLIENT_CIDR" {
   description = "Client CIDR block for the VPN endpoint"
 }
 
-variable "DOMAIN" {
-  type = string
-}
-
-variable "ENV" {
-  type = string
-}
-
 variable "NAME" {
-  type    = string
-  default = "shared-tldrlw"
-}
-
-variable "ORG" {
   type = string
 }
 
@@ -25,6 +12,10 @@ variable "PROJECT" {
 }
 
 variable "PRIVATE_SUBNET_CIDR" {
+  type = string
+}
+
+variable "REGION" {
   type = string
 }
 

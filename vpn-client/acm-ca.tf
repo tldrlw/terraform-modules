@@ -7,7 +7,7 @@ resource "tls_private_key" "ca" {
 resource "tls_self_signed_cert" "ca" {
   private_key_pem = tls_private_key.ca.private_key_pem
   subject {
-    common_name  = "${var.PROJECT}.${var.ENV}.vpn.ca"
+    common_name  = "${var.PROJECT}.${var.NAME}.vpn.ca"
     organization = var.PROJECT
   }
   validity_period_hours = 87600
@@ -26,14 +26,14 @@ resource "aws_acm_certificate" "ca" {
 
 # AWS SSM records
 resource "aws_ssm_parameter" "vpn_ca_key" {
-  name        = "/${var.PROJECT}/${var.ENV}/acm/vpn/ca_key"
+  name        = "/${var.PROJECT}/${var.NAME}/acm/vpn/ca_key"
   description = "VPN CA key"
   type        = "SecureString"
   value       = tls_private_key.ca.private_key_pem
 
 }
 resource "aws_ssm_parameter" "vpn_ca_cert" {
-  name        = "/${var.PROJECT}/${var.ENV}/acm/vpn/ca_cert"
+  name        = "/${var.PROJECT}/${var.NAME}/acm/vpn/ca_cert"
   description = "VPN CA cert"
   type        = "SecureString"
   value       = tls_self_signed_cert.ca.cert_pem

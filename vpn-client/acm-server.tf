@@ -13,7 +13,7 @@ resource "tls_private_key" "server" {
 resource "tls_cert_request" "server" {
   private_key_pem = tls_private_key.server.private_key_pem
   subject {
-    common_name  = "${var.PROJECT}.${var.ENV}.vpn.server"
+    common_name  = "${var.PROJECT}.${var.NAME}.vpn.server"
     organization = var.PROJECT
   }
 }
@@ -32,14 +32,14 @@ resource "tls_locally_signed_cert" "server" {
 
 # AWS SSM records
 resource "aws_ssm_parameter" "vpn_server_key" {
-  name        = "/${var.PROJECT}/${var.ENV}/acm/vpn/server_key"
+  name        = "/${var.PROJECT}/${var.NAME}/acm/vpn/server_key"
   description = "VPN server key"
   type        = "SecureString"
   value       = tls_private_key.server.private_key_pem
 }
 
 resource "aws_ssm_parameter" "vpn_server_cert" {
-  name        = "/${var.PROJECT}/${var.ENV}/acm/vpn/server_cert"
+  name        = "/${var.PROJECT}/${var.NAME}/acm/vpn/server_cert"
   description = "VPN server cert"
   type        = "SecureString"
   value       = tls_locally_signed_cert.server.cert_pem

@@ -1,6 +1,6 @@
 # AWS S3 bucket for VPN config files
 resource "aws_s3_bucket" "config_file" {
-  bucket        = "${lower(var.PROJECT)}-${var.ENV}-vpn-config-file"
+  bucket        = "${lower(var.PROJECT)}-${var.NAME}-vpn-config-file"
   force_destroy = true
 }
 
@@ -33,8 +33,8 @@ data "aws_iam_policy_document" "s3_vpn_config_file" {
     actions = ["s3:*"]
     effect  = "Deny"
     resources = [
-      "arn:aws:s3:::${lower(var.PROJECT)}-${var.ENV}-vpn-config-files",
-      "arn:aws:s3:::${lower(var.PROJECT)}-${var.ENV}-vpn-config-files/*"
+      "arn:aws:s3:::${lower(var.PROJECT)}-${var.NAME}-vpn-config-files",
+      "arn:aws:s3:::${lower(var.PROJECT)}-${var.NAME}-vpn-config-files/*"
     ]
     condition {
       test     = "Bool"
@@ -46,4 +46,39 @@ data "aws_iam_policy_document" "s3_vpn_config_file" {
       identifiers = ["*"]
     }
   }
+}
+
+# AWS VPN config files generated to s3 bucket *.ovpn
+resource "aws_s3_object" "vpn-config-file" {
+  bucket                 = aws_s3_bucket.vpn-config-files.id
+  server_side_encryption = "aws:kms"
+  key                    = "${each.value}-${lower(var.PROJECT)}-${var.NAME}-vpn.ovpn"
+  content_base64 = base64encode(<<-EOT
+client
+dev tun
+proto ${aws_ec2_client_vpn_endpoint.vpn-client.transport_protocol}
+remote ${aws_ec2_client_vpn_endpoint.vpn-client.id}.prod.clientvpn.${var.REGION}.amazonaws.com ${aws_ec2_client_vpn_endpoint.vpn-client.vpn_port}
+remote-random-hostname
+resolv-retry infinite
+nobind
+remote-cert-tls server
+cipher AES-256-GCM
+--inactive ${var.VPN_INACTIVE_PERIOD} 100
+verb 3
+
+<ca>
+${aws_ssm_parameter.vpn_ca_cert.value}
+</ca>
+
+reneg-sec 0
+
+<cert>
+${aws_ssm_parameter.vpn_client_cert.value}
+</cert>
+
+<key>
+${aws_ssm_parameter.vpn_client_key.value}
+</key>
+    EOT
+  )
 }
