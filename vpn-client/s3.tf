@@ -49,7 +49,7 @@ data "aws_iam_policy_document" "s3_vpn_config_file" {
 }
 
 # AWS VPN config files generated to s3 bucket *.ovpn
-resource "aws_s3_object" "vpn-config-file" {
+resource "aws_s3_object" "vpn_config_file" {
   bucket                 = aws_s3_bucket.config_file.id
   server_side_encryption = "aws:kms"
   key                    = "${lower(var.PROJECT)}-${var.NAME}-vpn.ovpn"
