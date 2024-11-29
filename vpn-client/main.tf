@@ -38,7 +38,7 @@ resource "aws_cloudwatch_log_stream" "vpn_log_stream" {
 
 # Client VPN Endpoint
 resource "aws_ec2_client_vpn_endpoint" "main" {
-  client_cidr_block = var.CLIENT_CIDR_BLOCK # Client IP range, must not overlap with the VPC CIDR
+  client_cidr_block = var.CLIENT_CIDR # Client IP range, must not overlap with the VPC CIDR
   # Reference the managed ACM certificate
   server_certificate_arn = aws_acm_certificate_validation.server_cert_validation.certificate_arn
   authentication_options {
