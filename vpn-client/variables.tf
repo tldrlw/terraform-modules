@@ -1,14 +1,26 @@
-variable "NAME" {
-  type    = string
-  default = "shared-tldrlw"
-}
-
 variable "CLIENT_CIDR" {
   type        = string
   description = "Client CIDR block for the VPN endpoint"
 }
 
 variable "DOMAIN" {
+  type = string
+}
+
+variable "ENV" {
+  type = string
+}
+
+variable "NAME" {
+  type    = string
+  default = "shared-tldrlw"
+}
+
+variable "ORG" {
+  type = string
+}
+
+variable "PROJECT" {
   type = string
 }
 
@@ -30,18 +42,6 @@ variable "VPC_CIDR" {
 }
 
 variable "VPC_ID" {
-  type = string
-}
-
-variable "ORG" {
-  type = string
-}
-
-variable "PROJECT" {
-  type = string
-}
-
-variable "ENV" {
   type = string
 }
 
