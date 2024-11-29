@@ -24,6 +24,11 @@ resource "aws_route" "vpn_to_api_gateway" {
   vpc_endpoint_id        = var.APIG_VPC_ENDPOINT_ID # Replace with the VPC endpoint ID for API Gateway
 }
 
+resource "aws_vpc_endpoint_route_table_association" "api_gateway" {
+  route_table_id  = aws_route_table.private_route_table.id
+  vpc_endpoint_id = var.APIG_VPC_ENDPOINT_ID
+}
+
 # Associate the Subnet with the Private Route Table
 resource "aws_route_table_association" "private_subnet_association" {
   subnet_id      = aws_subnet.private.id
