@@ -25,7 +25,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "config_file" {
 
 resource "aws_s3_bucket_policy" "config_file" {
   bucket = aws_s3_bucket.config_file.id
-  policy = data.aws_iam_policy_document.config_file.json
+  policy = data.aws_iam_policy_document.s3_vpn_config_file.json
 }
 
 data "aws_iam_policy_document" "s3_vpn_config_file" {

@@ -2,7 +2,7 @@
 resource "aws_ec2_client_vpn_endpoint" "main" {
   client_cidr_block = var.CLIENT_CIDR # Client IP range, must not overlap with the VPC CIDR
   # Reference the managed ACM certificate
-  server_certificate_arn = aws_acm_certificate.server.certificate_arn
+  server_certificate_arn = aws_acm_certificate.server.arn
   authentication_options {
     type                       = "certificate-authentication"
     root_certificate_chain_arn = aws_acm_certificate.client.arn # Use the root cert from ACM
