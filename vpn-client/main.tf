@@ -1,12 +1,11 @@
-# Create Private Subnets
+# Create a Single Private Subnet
 resource "aws_subnet" "private" {
-  count                   = 2 # Adjust based on the number of Availability Zones (AZs) you want to use
   vpc_id                  = var.VPC_ID
-  cidr_block              = "10.0.${count.index + 20}.0/24" # New range for VPN subnets
-  availability_zone       = data.aws_availability_zones.available.names[count.index]
+  cidr_block              = "10.0.20.0/24" # Adjusted range for the single VPN subnet
+  availability_zone       = data.aws_availability_zones.available.names[0]
   map_public_ip_on_launch = false
   tags = {
-    Name = "private-vpn-client-${data.aws_availability_zones.available.names[count.index]}"
+    Name = "private-vpn-client-${data.aws_availability_zones.available.names[0]}"
   }
 }
 
@@ -31,22 +30,17 @@ resource "aws_ec2_client_vpn_endpoint" "main" {
   }
 }
 
-# Associate the Client VPN Endpoint with Private Subnets
+# Associate the Client VPN Endpoint with a Single Private Subnet
 resource "aws_ec2_client_vpn_network_association" "main" {
-  count                  = 2 # Match the number of private subnets
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.main.id
-  subnet_id              = aws_subnet.private[count.index].id
+  subnet_id              = aws_subnet.private[0].id
   depends_on             = [aws_security_group.client_vpn]
 }
 
-# Add a Route to Allow VPN Clients to Access VPC Resources
 resource "aws_ec2_client_vpn_route" "vpc_route" {
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.main.id
-  destination_cidr_block = var.VPC_CIDR             # Example: "10.0.0.0/16"
-  target_vpc_subnet_id   = aws_subnet.private[0].id # Use the first private subnet as the route target
-  lifecycle {
-    ignore_changes = [destination_cidr_block]
-  }
+  destination_cidr_block = var.VPC_CIDR # Example: "10.0.0.0/16"
+  target_vpc_subnet_id   = aws_subnet.private[0].id
 }
 
 resource "aws_acm_certificate" "server_cert" {
