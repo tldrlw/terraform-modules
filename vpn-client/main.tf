@@ -9,6 +9,20 @@ resource "aws_subnet" "private" {
   }
 }
 
+# Create a Private Route Table for the Subnet
+resource "aws_route_table" "private_route_table" {
+  vpc_id = var.VPC_ID
+  tags = {
+    Name = "Private Subnet Route Table"
+  }
+}
+
+# Associate the Subnet with the Private Route Table
+resource "aws_route_table_association" "private_subnet_association" {
+  subnet_id      = aws_subnet.private.id
+  route_table_id = aws_route_table.private_route_table.id
+}
+
 # Client VPN Endpoint
 resource "aws_ec2_client_vpn_endpoint" "main" {
   client_cidr_block = var.CLIENT_CIDR_BLOCK # Client IP range, must not overlap with the VPC CIDR
@@ -45,6 +59,7 @@ resource "aws_ec2_client_vpn_network_association" "main" {
 #     ignore_changes = [destination_cidr_block]
 #   }
 # }
+# ^ The route for the destination CIDR 10.0.0.0/16 was automatically created by AWS when the Client VPN endpoint cvpn-endpoint-0b564f3fc6065c40e was associated with the subnet subnet-0cc7e4838a47117e3. This default route, of type Nat, ensures traffic from VPN clients is properly routed through the associated subnet. Since AWS handles this route creation automatically, defining an aws_ec2_client_vpn_route resource in Terraform would result in duplicate route errors during provisioning. This redundancy occurs because Terraform tries to create a route that already exists, leading to conflicts. Therefore, it’s unnecessary to manage this route manually in Terraform.
 
 resource "aws_acm_certificate" "server_cert" {
   domain_name       = "vpn.${var.DOMAIN}" # Replace with your desired domain
