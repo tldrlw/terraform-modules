@@ -2,10 +2,10 @@
 resource "aws_ec2_client_vpn_endpoint" "main" {
   client_cidr_block = var.CLIENT_CIDR # Client IP range, must not overlap with the VPC CIDR
   # Reference the managed ACM certificate
-  server_certificate_arn = aws_acm_certificate_validation.server_cert_validation.certificate_arn
+  server_certificate_arn = aws_acm_certificate.server.certificate_arn
   authentication_options {
     type                       = "certificate-authentication"
-    root_certificate_chain_arn = aws_acm_certificate.server_cert.arn # Use the root cert from ACM
+    root_certificate_chain_arn = aws_acm_certificate.client.arn # Use the root cert from ACM
   }
   connection_log_options {
     enabled               = true
@@ -26,6 +26,10 @@ resource "aws_ec2_client_vpn_authorization_rule" "allow_all" {
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.main.id
   target_network_cidr    = var.VPC_CIDR # e.g., "10.0.0.0/16"
   authorize_all_groups   = true
+  depends_on = [
+    aws_ec2_client_vpn_endpoint.main,
+    aws_ec2_client_vpn_network_association.main
+  ]
 }
 
 # Associate the Client VPN Endpoint with a Single Private Subnet
