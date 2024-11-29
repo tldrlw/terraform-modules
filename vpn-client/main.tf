@@ -23,6 +23,14 @@ resource "aws_route_table_association" "private_subnet_association" {
   route_table_id = aws_route_table.private_route_table.id
 }
 
+resource "aws_cloudwatch_log_group" "vpn_logs" {
+  name              = "vpn-log-group"
+  retention_in_days = 30 # Adjust retention period as needed
+  tags = {
+    Name = "VPN Log Group"
+  }
+}
+
 # Client VPN Endpoint
 resource "aws_ec2_client_vpn_endpoint" "main" {
   client_cidr_block = var.CLIENT_CIDR_BLOCK # Client IP range, must not overlap with the VPC CIDR
@@ -33,7 +41,9 @@ resource "aws_ec2_client_vpn_endpoint" "main" {
     root_certificate_chain_arn = aws_acm_certificate.server_cert.arn # Use the root cert from ACM
   }
   connection_log_options {
-    enabled = false
+    enabled               = true
+    cloudwatch_log_group  = aws_cloudwatch_log_group.vpn_logs.name
+    cloudwatch_log_stream = "vpn-log-stream"
   }
   # Explicitly include the VPC ID for the associated security groups
   security_group_ids = [aws_security_group.client_vpn.id]
@@ -55,6 +65,12 @@ resource "aws_ec2_client_vpn_network_association" "main" {
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.main.id
   subnet_id              = aws_subnet.private.id
   depends_on             = [aws_security_group.client_vpn]
+}
+
+resource "aws_ec2_client_vpn_route" "vpn_internet_route" {
+  client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.main.id
+  destination_cidr_block = "0.0.0.0/0"
+  target_vpc_subnet_id   = aws_subnet.private.id
 }
 
 # resource "aws_ec2_client_vpn_route" "vpc_route" {
