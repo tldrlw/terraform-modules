@@ -52,7 +52,7 @@ data "aws_iam_policy_document" "s3_vpn_config_file" {
 resource "aws_s3_object" "vpn-config-file" {
   bucket                 = aws_s3_bucket.config_file.id
   server_side_encryption = "aws:kms"
-  key                    = "${each.value}-${lower(var.PROJECT)}-${var.NAME}-vpn.ovpn"
+  key                    = "${lower(var.PROJECT)}-${var.NAME}-vpn.ovpn"
   content_base64 = base64encode(<<-EOT
 client
 dev tun
