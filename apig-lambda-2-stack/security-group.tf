@@ -32,6 +32,8 @@ resource "aws_vpc_security_group_ingress_rule" "api_gateway_vpn_ingress" {
     Name = "${var.APP_NAME}-api-gateway-vpn-access"
   }
 }
+# The ingress rule you configured in the API Gateway’s security group allows VPN clients to communicate with the API Gateway by accepting HTTPS traffic from the VPN CIDR.
+# This is necessary, but it’s not sufficient on its own. The networking layer (i.e., routing) must also be properly configured to allow the VPN traffic to reach the API Gateway.
 
 resource "aws_vpc_security_group_egress_rule" "api_gateway_egress" {
   security_group_id = aws_security_group.api_gateway.id
