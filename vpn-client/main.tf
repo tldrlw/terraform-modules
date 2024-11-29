@@ -17,6 +17,7 @@ resource "aws_ec2_client_vpn_endpoint" "main" {
   vpc_id             = var.VPC_ID # Add this line
   split_tunnel       = true
   # Your configuration already has split_tunnel = true, meaning only traffic destined for the VPC CIDR or routes explicitly defined (e.g., 0.0.0.0/0) will go through the VPN. Other internet-bound traffic from your device will bypass the VPN and go through your normal internet connection.
+  dns_servers = ["169.254.169.253"] # Default AWS DNS resolver for private VPC resolution
   tags = {
     Name = "Client VPN Endpoint"
   }
