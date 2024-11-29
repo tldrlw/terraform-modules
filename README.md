@@ -46,6 +46,10 @@
   - currently set up to have a single λ function push multiple cloudwatch log groups to loki, but for scaling, could explore having multiple λ functions in the future
   - assumes that this 'logging' module instantiation is for an entire organization, i.e., logging will cover all infrastructure components that are part of `tldrlw`, meaning all apps (e.g., monza, blog, etc.) and their associated components like λ functions can/will be included in this logging setup
 
+## vpn-client
+
+- got some help from https://registry.terraform.io/modules/babicamir/vpn-client/aws/latest
+
 ### future additions:
 
 - **DONE**, added `linux_arm64` boolean variable

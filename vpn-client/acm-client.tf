@@ -1,4 +1,3 @@
-# TLS certificate and key
 resource "tls_private_key" "client" {
   algorithm = "RSA"
 }
@@ -23,7 +22,6 @@ resource "tls_locally_signed_cert" "client" {
   ]
 }
 
-# AWS ACM certificate
 resource "aws_acm_certificate" "client" {
   private_key       = tls_private_key.client.private_key_pem
   certificate_body  = tls_locally_signed_cert.client.cert_pem
