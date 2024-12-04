@@ -2,10 +2,10 @@
 resource "aws_ec2_client_vpn_endpoint" "main" {
   client_cidr_block = var.CLIENT_CIDR # Client IP range, must not overlap with the VPC CIDR
   # Reference the managed ACM certificate
-  server_certificate_arn = aws_acm_certificate_validation.server_cert_validation.certificate_arn
+  server_certificate_arn = aws_acm_certificate.server.arn
   authentication_options {
     type                       = "certificate-authentication"
-    root_certificate_chain_arn = aws_acm_certificate.server_cert.arn # Use the root cert from ACM
+    root_certificate_chain_arn = aws_acm_certificate.client.arn # Use the root cert from ACM
   }
   connection_log_options {
     enabled               = true
@@ -17,15 +17,26 @@ resource "aws_ec2_client_vpn_endpoint" "main" {
   vpc_id             = var.VPC_ID # Add this line
   split_tunnel       = true
   # Your configuration already has split_tunnel = true, meaning only traffic destined for the VPC CIDR or routes explicitly defined (e.g., 0.0.0.0/0) will go through the VPN. Other internet-bound traffic from your device will bypass the VPN and go through your normal internet connection.
+  dns_servers = ["169.254.169.253"] # Default AWS DNS resolver for private VPC resolution
   tags = {
     Name = "Client VPN Endpoint"
   }
+}
+
+resource "aws_ec2_client_vpn_route" "dns_route" {
+  client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.main.id
+  destination_cidr_block = "169.254.169.253/32"
+  target_vpc_subnet_id   = aws_subnet.private.id
 }
 
 resource "aws_ec2_client_vpn_authorization_rule" "allow_all" {
   client_vpn_endpoint_id = aws_ec2_client_vpn_endpoint.main.id
   target_network_cidr    = var.VPC_CIDR # e.g., "10.0.0.0/16"
   authorize_all_groups   = true
+  depends_on = [
+    aws_ec2_client_vpn_endpoint.main,
+    aws_ec2_client_vpn_network_association.main
+  ]
 }
 
 # Associate the Client VPN Endpoint with a Single Private Subnet

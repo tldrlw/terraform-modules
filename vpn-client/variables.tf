@@ -3,11 +3,19 @@ variable "CLIENT_CIDR" {
   description = "Client CIDR block for the VPN endpoint"
 }
 
-variable "DOMAIN" {
+variable "NAME" {
+  type = string
+}
+
+variable "PROJECT" {
   type = string
 }
 
 variable "PRIVATE_SUBNET_CIDR" {
+  type = string
+}
+
+variable "REGION" {
   type = string
 }
 
@@ -28,3 +36,6 @@ variable "VPC_ID" {
   type = string
 }
 
+variable "VPN_INACTIVE_PERIOD" {
+  type = string
+}

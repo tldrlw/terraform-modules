@@ -16,6 +16,7 @@ resource "aws_route_table" "private_route_table" {
     Name = "Private Subnet Route Table"
   }
 }
+# Your private subnet’s route table determines where traffic from instances in the subnet (including VPN clients) is sent.
 
 # Associate the Subnet with the Private Route Table
 resource "aws_route_table_association" "private_subnet_association" {

@@ -46,6 +46,12 @@
   - currently set up to have a single λ function push multiple cloudwatch log groups to loki, but for scaling, could explore having multiple λ functions in the future
   - assumes that this 'logging' module instantiation is for an entire organization, i.e., logging will cover all infrastructure components that are part of `tldrlw`, meaning all apps (e.g., monza, blog, etc.) and their associated components like λ functions can/will be included in this logging setup
 
+## vpn-client
+
+- got some help from https://registry.terraform.io/modules/babicamir/vpn-client/aws/latest, and if, in the future, I want to have more than one VPN profile I can use this since he set up the module to serve that purpose
+- worked on this from 11/28 to 11/30/24, **doesn't work**, can connect using the AWS VPN client, but can't make calls to λs through APIG, so giving up and **will use temp dev λ function URLs for testing**
+- intention was to use this to be able to call λs in VPC (behind SGs) fronted by APIG when doing local development
+
 ### future additions:
 
 - **DONE**, added `linux_arm64` boolean variable
