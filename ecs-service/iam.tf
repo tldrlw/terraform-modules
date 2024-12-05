@@ -1,6 +1,6 @@
 # Execution Role for ECS Task Lifecycle Management
 resource "aws_iam_role" "ecs_task_execution_role" {
-  name = "${var.app_name}-ecs-execution-role"
+  name = "${var.APP_NAME}-ecs-execution-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
     Statement = [{
@@ -29,7 +29,7 @@ data "aws_iam_policy_document" "create_log_group_policy_doc" {
 }
 
 resource "aws_iam_policy" "create_log_group_policy" {
-  name        = "${var.app_name}-create-log-group-policy"
+  name        = "${var.APP_NAME}-create-log-group-policy"
   description = "Policy to allow creating CloudWatch Log Groups"
   policy      = data.aws_iam_policy_document.create_log_group_policy_doc.json
 }
@@ -42,7 +42,7 @@ resource "aws_iam_role_policy_attachment" "attach_create_log_group_policy" {
 
 # Task Role for Application-Level Permissions
 resource "aws_iam_role" "ecs_task_role" {
-  name = "${var.app_name}-ecs-task-role"
+  name = "${var.APP_NAME}-ecs-task-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
     Statement = [{
@@ -67,7 +67,7 @@ data "aws_iam_policy_document" "s3_access_policy_doc" {
 
 resource "aws_iam_policy" "s3_access_policy" {
   count       = var.s3_access ? 1 : 0 # Attach only if `var.s3_access` is true
-  name        = "${var.app_name}-s3-access-policy"
+  name        = "${var.APP_NAME}-s3-access-policy"
   description = "Policy to allow access to all files in the S3 bucket"
   policy      = data.aws_iam_policy_document.s3_access_policy_doc[0].json
 }
@@ -94,7 +94,7 @@ data "aws_iam_policy_document" "ecs_exec_policy" {
 }
 
 resource "aws_iam_policy" "ecs_exec_policy" {
-  name   = "${var.app_name}-ecs-exec-policy"
+  name   = "${var.APP_NAME}-ecs-exec-policy"
   policy = data.aws_iam_policy_document.ecs_exec_policy.json
 }
 

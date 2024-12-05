@@ -5,11 +5,14 @@ resource "aws_appautoscaling_target" "example" {
   scalable_dimension = "ecs:service:DesiredCount"
   min_capacity       = var.AUTO_SCALING_MIN # Minimum number of tasks
   max_capacity       = var.AUTO_SCALING_MAX # Maximum number of tasks
+  tags = {
+    Name = "${var.APP_NAME}-autoscaling-target"
+  }
 }
 
 # CloudWatch alarm for high CPU utilization (Scale Out)
 resource "aws_cloudwatch_metric_alarm" "high_cpu" {
-  alarm_name          = "high-cpu"
+  alarm_name          = "${var.APP_NAME}-high-cpu"
   comparison_operator = "GreaterThanThreshold" # Trigger when CPU is above the threshold
   evaluation_periods  = 2                      # Number of consecutive periods for evaluation
   metric_name         = "CPUUtilization"
@@ -26,7 +29,7 @@ resource "aws_cloudwatch_metric_alarm" "high_cpu" {
 
 # CloudWatch alarm for low CPU utilization (Scale In)
 resource "aws_cloudwatch_metric_alarm" "low_cpu" {
-  alarm_name          = "low-cpu"
+  alarm_name          = "${var.APP_NAME}-low-cpu"
   comparison_operator = "LessThanThreshold" # Trigger when CPU is below the threshold
   evaluation_periods  = 2
   metric_name         = "CPUUtilization"
@@ -43,7 +46,7 @@ resource "aws_cloudwatch_metric_alarm" "low_cpu" {
 
 # Step scaling policy for scaling out (adding tasks)
 resource "aws_appautoscaling_policy" "scale_out" {
-  name               = "scale-out"
+  name               = "${var.APP_NAME}-scale-out"
   service_namespace  = "ecs"
   resource_id        = aws_appautoscaling_target.example.resource_id
   scalable_dimension = "ecs:service:DesiredCount"
@@ -67,7 +70,7 @@ resource "aws_appautoscaling_policy" "scale_out" {
 
 # Step scaling policy for scaling in (removing tasks)
 resource "aws_appautoscaling_policy" "scale_in" {
-  name               = "scale-in"
+  name               = "${var.APP_NAME}-scale-in"
   service_namespace  = "ecs"
   resource_id        = aws_appautoscaling_target.example.resource_id
   scalable_dimension = "ecs:service:DesiredCount"
