@@ -1,5 +1,5 @@
 resource "aws_ecs_service" "app" {
-  name            = var.app_name
+  name            = var.APP_NAME
   cluster         = var.ecs_cluster_id
   task_definition = aws_ecs_task_definition.app.arn
   desired_count   = var.task_count
@@ -13,7 +13,7 @@ resource "aws_ecs_service" "app" {
   }
   load_balancer {
     target_group_arn = var.alb_target_group_arn
-    container_name   = var.app_name
+    container_name   = var.APP_NAME
     # container_port   = 80
     # ^ use for nginx:latest
     container_port = var.container_port
@@ -21,7 +21,7 @@ resource "aws_ecs_service" "app" {
 }
 
 resource "aws_ecs_task_definition" "app" {
-  family                   = var.app_name
+  family                   = var.APP_NAME
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn # ECS execution role for logging and image pull
@@ -44,7 +44,7 @@ resource "aws_ecs_task_definition" "app" {
   container_definitions = templatefile(
     "${path.module}/task_definition.tpl.json",
     {
-      app_name              = var.app_name
+      app_name              = var.APP_NAME
       image                 = "${var.ecr_repo_url}:${var.image_tag}"
       container_port        = var.container_port
       host_port             = var.host_port
