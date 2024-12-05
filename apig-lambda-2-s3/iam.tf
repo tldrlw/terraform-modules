@@ -20,7 +20,9 @@ data "aws_iam_policy_document" "s3" {
   statement {
     effect    = "Allow"
     actions   = var.S3_PERMISSIONS
-    resources = [var.S3_BUCKET_ARN]
+    resources = [var.S3_BUCKET_ARN, "${var.S3_BUCKET_ARN}/*"]
+    # important to have a duplicate of the arn but with the wildcard path as a suffix, otherwise, despite having the correct permissions, you'll get an "AccessDeniedException" error
+    # ^ https://github.com/tgroshon/amplify2terraform/blob/d080dd55e1aefb9de8eee315c9bac85cdf93803f/terraform/api.tf#L167
   }
 }
 
