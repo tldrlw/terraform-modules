@@ -1,9 +1,8 @@
 resource "aws_ecs_service" "app" {
-  name            = var.APP_NAME
-  cluster         = var.ecs_cluster_id
-  task_definition = aws_ecs_task_definition.app.arn
-  desired_count   = var.task_count
-  # ^ change to 1 or 2 when you want the task running, as opposed to 0
+  name                   = var.APP_NAME
+  cluster                = var.ecs_cluster_id
+  task_definition        = aws_ecs_task_definition.app.arn
+  desired_count          = var.AUTO_SCALING_MIN
   launch_type            = "FARGATE"
   enable_execute_command = true # Enables ECS Exec
   network_configuration {
