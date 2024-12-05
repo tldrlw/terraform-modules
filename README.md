@@ -40,6 +40,11 @@
 
 - To see this being implemented, check out https://github.com/tldrlw/blog-tldrlw/blob/main/infrastructure/ecs.tf
 
+- 12/5/24, added auto scaling
+  - Step scaling and target tracking scaling are two approaches to auto-scaling in AWS, each suited to different needs. **Step scaling allows for granular control by defining specific scaling actions based on predefined CloudWatch metric thresholds, making it ideal for unpredictable demand scenarios where large, sudden spikes require precise adjustments.**
+  - In contrast, target tracking scaling automatically adjusts capacity to maintain a target metric, such as keeping CPU utilization at 50%, offering simplicity and continuous optimization.
+  - While target tracking is efficient for steady or predictable workloads, I opted for step scaling because my **app’s demand is highly unpredictable**, and step scaling provides greater flexibility to handle sudden changes with predefined, controlled scaling actions. That said, target tracking’s advantages, such as its ease of setup and dynamic adjustment to workload changes, could still benefit my app by providing smoother scaling responses over time. However, the immediate need to address sharp demand fluctuations makes step scaling the more suitable choice for now.
+
 ## logging
 
 - 11/6/24, will need to have loki and grafana images built and pushed to ECR prior to instantiating module, calling module will also need to have ECR repos (for loki and grafana) managed prior

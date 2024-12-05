@@ -14,6 +14,10 @@ variable "ecs_cluster_id" {
   type = string
 }
 
+variable "ECS_CLUSTER_NAME" {
+  type = string
+}
+
 variable "task_count" {
   type = number
 }
@@ -83,4 +87,14 @@ variable "s3_access" {
 variable "s3_bucket" {
   type    = string
   default = ""
+}
+
+variable "AUTO_SCALING_MIN" {
+  type    = number
+  default = 1
+}
+
+variable "AUTO_SCALING_MAX" {
+  type    = number
+  default = 5
 }
