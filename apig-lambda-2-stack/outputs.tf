@@ -36,9 +36,6 @@ output "private_subnet_ids" {
 output "vpc_endpoint_dydb_prefix_list_id" {
   value = aws_vpc_endpoint.dynamodb.prefix_list_id
 }
-output "vpc_endpoint_s3_prefix_list_id" {
-  value = aws_vpc_endpoint.s3.prefix_list_id
-}
 
 output "private_apig_policy" {
   value = aws_api_gateway_rest_api_policy.private

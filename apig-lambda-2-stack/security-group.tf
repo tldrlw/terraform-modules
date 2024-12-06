@@ -2,7 +2,6 @@ resource "aws_security_group" "api_gateway" {
   name        = "${var.APP_NAME}-api-gateway"
   description = "Security group for API Gateway VPC endpoint"
   vpc_id      = var.VPC_ID
-
   tags = {
     Name = "${var.APP_NAME}-api-gateway"
   }
