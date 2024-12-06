@@ -84,8 +84,9 @@ resource "aws_api_gateway_integration_response" "options_200" {
     "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST,PUT,DELETE'"
     "method.response.header.Access-Control-Allow-Origin"  = "'*'"
   }
-  # Ensure that this integration response is only created after the integration is ready
+  # Ensure that this integration response is only created after the method and integration are ready
   depends_on = [
+    aws_api_gateway_method.main,
     aws_api_gateway_integration.options
   ]
 }
