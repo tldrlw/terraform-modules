@@ -23,16 +23,3 @@ resource "aws_vpc_endpoint" "dynamodb" {
     Name = "${var.APP_NAME}-lambda-to-dynamodb"
   }
 }
-
-# VPC Endpoint for S3
-resource "aws_vpc_endpoint" "s3" {
-  vpc_id            = var.VPC_ID
-  service_name      = "com.amazonaws.${var.REGION}.s3"
-  vpc_endpoint_type = "Gateway" # S3 requires a Gateway VPC Endpoint
-  route_table_ids = [
-    aws_route_table.private.id
-  ]
-  tags = {
-    Name = "${var.APP_NAME}-lambda-to-s3"
-  }
-}
