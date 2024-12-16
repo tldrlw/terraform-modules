@@ -18,9 +18,8 @@ variable "ECS_CLUSTER_ID" {
   type = string
 }
 
-variable "ECS_TASK_COUNT_GRAFANA" {
-  type    = number
-  default = 1
+variable "ECS_CLUSTER_NAME" {
+  type = string
 }
 
 variable "ECS_TASK_COUNT_LOKI" {
