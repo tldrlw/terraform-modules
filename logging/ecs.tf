@@ -4,7 +4,7 @@ module "ecs_service_grafana" {
   ecr_repo_url                = var.ECR_REPO_URL_GRAFANA
   image_tag                   = var.IMAGE_TAG_GRAFANA
   ecs_cluster_id              = var.ECS_CLUSTER_ID
-  ECS_CLUSTER_NAME            = VAR.ECS_CLUSTER_NAME
+  ECS_CLUSTER_NAME            = var.ECS_CLUSTER_NAME
   alb_target_group_arn        = var.ALB_TARGET_GROUP_ARN_GRAFANA
   source_security_group_id    = var.SOURCE_ALB_SECURITY_GROUP_ID
   security_group_egress_cidrs = ["0.0.0.0/0"]
